@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Remove Background from Photo Free – AI White Background for Government Forms | FormPhotoResize.in</title>
+  <meta name="description" content="Remove photo background and replace with white instantly using AI — free, 100% in-browser, no upload. Perfect for Aadhar, PAN, Passport, MPSC and all government form photos.">
+  <meta name="keywords" content="remove background photo free, white background photo online, ai background remover, government form photo white background, passport photo background remove, mpsc photo white background">
+
+  <link rel="canonical" href="https://formphotosize.in/tools/remove-background.html">
+  <meta property="og:title"       content="AI Background Remover — Free, In-Browser, White Background">
+  <meta property="og:description" content="Remove photo background and add white fill instantly using AI. Free, private, no upload needed.">
+  <meta property="og:type"        content="website">
+  <meta property="og:url"         content="https://formphotosize.in/tools/remove-background.html">
+
+  <link rel="stylesheet" href="../assets/style.css">
+
+  <style>
+    .ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #7C3AED, #4F46E5);
+      color: white;
+      border-radius: 99px;
+      padding: 4px 12px;
+      letter-spacing: 0.04em;
+      margin-bottom: 14px;
+    }
+
+    .how-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 520px) { .how-steps { grid-template-columns: 1fr; } }
+
+    .how-step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 16px 14px;
+      text-align: center;
+    }
+    .how-step-num {
+      width: 28px; height: 28px;
+      background: var(--saffron);
+      color: white;
+      border-radius: 50%;
+      font-size: 13px;
+      font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 8px;
+    }
+    .how-step-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .how-step-sub   { font-size: 11px; color: var(--muted); }
+
+    /* Canvas area */
+    .canvas-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 480px) { .canvas-row { grid-template-columns: 1fr; } }
+
+    .canvas-box {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+      position: relative;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .canvas-box img, .canvas-box canvas {
+      max-width: 100%;
+      max-height: 280px;
+      object-fit: contain;
+      display: block;
+    }
+    .canvas-box-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(0,0,0,0.55);
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 10px;
+      text-align: center;
+    }
+    .canvas-placeholder {
+      text-align: center;
+      padding: 24px 16px;
+      color: var(--muted-light);
+    }
+    .canvas-placeholder .ph-icon { font-size: 36px; margin-bottom: 8px; }
+    .canvas-placeholder p { font-size: 12px; }
+
+    /* Checkerboard bg for transparency preview */
+    .canvas-box.transparent-bg {
+      background-image:
+        linear-gradient(45deg, #ccc 25%, transparent 25%),
+        linear-gradient(-45deg, #ccc 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #ccc 75%),
+        linear-gradient(-45deg, transparent 75%, #ccc 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+    }
+
+    /* Progress bar */
+    .ai-progress {
+      display: none;
+      margin-bottom: 16px;
+    }
+    .ai-progress.show { display: block; }
+    .ai-progress-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .ai-progress-track {
+      height: 6px;
+      background: var(--bg);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .ai-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #7C3AED, var(--saffron));
+      border-radius: 99px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+
+    /* BG colour options */
+    .bg-options {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .bg-options label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .bg-swatch {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 2.5px solid var(--border);
+      cursor: pointer;
+      transition: border-color 0.15s, transform 0.15s;
+      flex-shrink: 0;
+    }
+    .bg-swatch:hover   { transform: scale(1.15); }
+    .bg-swatch.active  { border-color: var(--saffron); transform: scale(1.15); }
+    .bg-swatch.white   { background: #FFFFFF; box-shadow: inset 0 0 0 1px #E2E8F0; }
+    .bg-swatch.none    { background: transparent;
+      background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+      background-size: 8px 8px; background-position: 0 0,0 4px,4px -4px,-4px 0;}
+    .bg-swatch.light-gray { background: #F1F5F9; }
+    .bg-swatch.blue    { background: #DBEAFE; }
+
+    /* Action buttons row */
+    .action-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .btn-ai {
+      flex: 1;
+      min-width: 160px;
+      background: linear-gradient(135deg, #7C3AED, #4F46E5);
+      color: white;
+      border: none;
+      border-radius: var(--r);
+      padding: 13px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-ai:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); }
+    .btn-ai:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .btn-resize-after {
+      flex: 1;
+      min-width: 160px;
+      background: var(--navy);
+      color: white;
+      border: none;
+      border-radius: var(--r);
+      padding: 13px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.15s;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+    .btn-resize-after.show { display: flex; }
+    .btn-resize-after:hover { background: var(--saffron); }
+
+    /* Share + Rating (v2 tool.js hooks) */
+    .share-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .btn-share {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 9px 16px;
+      border-radius: var(--r-sm);
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      color: var(--text);
+    }
+    .btn-share:hover { border-color: var(--saffron); background: var(--saffron-light); }
+    .btn-share.wa    { border-color: #25D366; color: #128C7E; }
+    .btn-share.wa:hover { background: #F0FDF4; }
+
+    /* Rating box */
+    .rating-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 16px 20px;
+      text-align: center;
+      display: none;
+      margin-bottom: 16px;
+    }
+    .rating-box p { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 10px; }
+    .star-row { display: flex; justify-content: center; gap: 6px; }
+    .star-btn {
+      font-size: 26px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      opacity: 0.3;
+      transition: opacity 0.1s, transform 0.1s;
+      line-height: 1;
+    }
+    .star-btn.lit  { opacity: 1; }
+    .star-btn:hover { transform: scale(1.2); }
+    #rating-thanks { display: none; font-size: 13px; color: var(--green); margin-top: 8px; font-weight: 600; }
+
+    /* Model loading notice */
+    .model-notice {
+      background: #EDE9FE;
+      border: 1px solid #C4B5FD;
+      border-radius: var(--r-sm);
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #5B21B6;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../" class="site-logo">
+      <div class="logo-mark">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="28" height="28" aria-hidden="true">
+          <rect width="200" height="200" rx="40" fill="#0F172A"/>
+          <rect x="30" y="70" width="140" height="100" rx="14" fill="none" stroke="#F97316" stroke-width="9"/>
+          <circle cx="100" cy="118" r="34" fill="none" stroke="#F97316" stroke-width="9"/>
+          <circle cx="100" cy="118" r="18" fill="#F97316" opacity="0.85"/>
+          <rect x="72" y="55" width="56" height="22" rx="8" fill="#F97316"/>
+          <circle cx="148" cy="88" r="7" fill="#F97316" opacity="0.6"/>
+        </svg>
+      </div>
+      <div>
+        <span class="logo-name">FormPhoto<span class="logo-tld">Resize.in</span></span>
+        <span class="logo-tagline">Free · Private · Instant</span>
+      </div>
+    </a>
+    <nav class="site-nav" id="site-nav">
+      <a href="../tools/remove-background.html" class="nav-link active">BG Remove</a>
+      <a href="../tools/heic-to-jpg.html"        class="nav-link">HEIC→JPG</a>
+      <a href="../tools/photo-validator.html"    class="nav-link">Validator</a>
+      <a href="../maharashtra/mpsc-photo-resizer.html" class="nav-link">Maharashtra</a>
+      <a href="../" class="nav-link">All Tools</a>
+    </nav>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Open menu">☰</button>
+  </div>
+</header>
+
+<main class="page-wrap">
+
+  <div class="page-hero">
+    <div class="ai-badge">✨ AI-Powered · 100% In-Browser</div>
+    <h1 class="page-title">Remove Background from Photo</h1>
+    <p class="page-subtitle">AI removes the background and fills it with white — ready for Aadhar, PAN, Passport, MPSC, and all government forms. Free, instant, your photo never leaves your device.</p>
+  </div>
+
+  <div class="privacy-banner">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    100% private — AI runs entirely in your browser. No image is uploaded anywhere.
+  </div>
+
+  <!-- How it works -->
+  <div class="section-label">How it works</div>
+  <div class="how-steps">
+    <div class="how-step">
+      <div class="how-step-num">1</div>
+      <div class="how-step-title">Upload photo</div>
+      <div class="how-step-sub">Any background — outdoor, coloured wall, studio</div>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">2</div>
+      <div class="how-step-title">AI removes BG</div>
+      <div class="how-step-sub">RMBG-1.4 model runs locally in your browser</div>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">3</div>
+      <div class="how-step-title">Download</div>
+      <div class="how-step-sub">White background PNG or JPG, ready to upload</div>
+    </div>
+  </div>
+
+  <div class="model-notice">
+    🤖 <div><strong>First use:</strong> The AI model (~180 MB) downloads once to your browser cache. Subsequent uses are instant. This is what makes it 100% private — no server involved.</div>
+  </div>
+
+  <!-- Upload zone -->
+  <div class="upload-zone" id="upload-zone" style="margin-bottom:16px;">
+    <div class="upload-icon" id="upload-icon">📁</div>
+    <div class="upload-title" id="upload-title">Click to upload or drag & drop</div>
+    <div class="upload-sub">JPG, PNG supported &nbsp;·&nbsp; Max 10 MB</div>
+    <div class="upload-hint">🔒 Photo never leaves your device</div>
+    <input type="file" id="file-input" accept="image/*">
+  </div>
+
+  <!-- Progress bar -->
+  <div class="ai-progress" id="ai-progress">
+    <div class="ai-progress-label">
+      <span id="progress-label">Loading AI model…</span>
+      <span id="progress-pct">0%</span>
+    </div>
+    <div class="ai-progress-track">
+      <div class="ai-progress-fill" id="progress-fill"></div>
+    </div>
+  </div>
+
+  <!-- Background colour options -->
+  <div class="bg-options" id="bg-options" style="display:none;">
+    <label>Background:</label>
+    <div class="bg-swatch white active" data-bg="white"    title="White"></div>
+    <div class="bg-swatch none"         data-bg="none"     title="Transparent (PNG)"></div>
+    <div class="bg-swatch light-gray"   data-bg="#F1F5F9"  title="Light grey"></div>
+    <div class="bg-swatch blue"         data-bg="#DBEAFE"  title="Light blue"></div>
+    <label style="margin-left:8px;font-weight:500;text-transform:none;letter-spacing:0;">Custom:</label>
+    <input type="color" id="bg-color-picker" value="#ffffff"
+      style="width:28px;height:28px;border:2px solid var(--border);border-radius:50%;cursor:pointer;padding:1px;">
+  </div>
+
+  <!-- Canvas row (before / after) -->
+  <div class="canvas-row" id="canvas-row" style="display:none;">
+    <div class="canvas-box" id="box-original">
+      <div class="canvas-placeholder">
+        <div class="ph-icon">🖼️</div>
+        <p>Original photo</p>
+      </div>
+      <div class="canvas-box-label">Original</div>
+    </div>
+    <div class="canvas-box" id="box-result">
+      <div class="canvas-placeholder">
+        <div class="ph-icon">✨</div>
+        <p>Result appears here</p>
+      </div>
+      <div class="canvas-box-label">Background Removed</div>
+    </div>
+  </div>
+
+  <!-- Action row -->
+  <div class="action-row" id="action-row">
+    <button class="btn-ai" id="btn-remove" disabled>
+      ✨ Remove Background
+    </button>
+    <button class="btn-download" id="btn-download" style="flex:1;min-width:160px;display:none;">
+      ⬇ Download Photo
+    </button>
+  </div>
+
+  <!-- Resize after CTA -->
+  <a href="../" class="btn-resize-after" id="btn-resize-after">
+    📐 Now resize for your exam →
+  </a>
+
+  <!-- Share + Rating (v2 hooks) -->
+  <div class="share-row" id="share-row" style="display:none;">
+    <button class="btn-share wa" id="share-wa">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Share on WhatsApp
+    </button>
+    <button class="btn-share" id="share-copy">
+      🔗 Copy Link
+    </button>
+  </div>
+
+  <div class="rating-box" id="rating-box">
+    <p>Was the background removed correctly?</p>
+    <div class="star-row">
+      <button class="star-btn" data-v="1">⭐</button>
+      <button class="star-btn" data-v="2">⭐</button>
+      <button class="star-btn" data-v="3">⭐</button>
+      <button class="star-btn" data-v="4">⭐</button>
+      <button class="star-btn" data-v="5">⭐</button>
+    </div>
+    <div id="rating-thanks">Thanks for your feedback! 🙏</div>
+  </div>
+
+  <!-- Related -->
+  <div class="related-strip">
+    <h3>Resize after removing background</h3>
+    <div class="related-links">
+      <a href="../maharashtra/mpsc-photo-resizer.html"   class="related-link">📋 MPSC Photo</a>
+      <a href="../maharashtra/mht-cet-photo-resizer.html" class="related-link">🔬 MHT-CET</a>
+      <a href="../kb/50kb-image-resizer.html"             class="related-link">🗜️ 50 KB Resizer</a>
+      <a href="../kb/20kb-image-resizer.html"             class="related-link">🗜️ 20 KB Resizer</a>
+      <a href="../tools/photo-validator.html"             class="related-link">✅ Photo Validator</a>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq-section">
+    <h2>Background Remover — FAQs</h2>
+
+    <div class="faq-item">
+      <button class="faq-q-btn">Is the AI background remover really free? <span class="faq-chevron">⌄</span></button>
+      <div class="faq-answer">Yes, completely free. The AI model (RMBG-1.4) runs entirely inside your browser using WebAssembly. There are no API calls, no server costs, and no limits. Because processing is local, it is also 100% private.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q-btn">Why does it take a moment on first use? <span class="faq-chevron">⌄</span></button>
+      <div class="faq-answer">The AI model (~180 MB) downloads once to your browser cache — much smaller than typical AI tools. After that first download, the tool runs instantly even without internet. The progress bar shows the download status.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q-btn">Will this work for passport and government form photos? <span class="faq-chevron">⌄</span></button>
+      <div class="faq-answer">Yes. The model is trained on portrait photos and works well for face shots with varied backgrounds — outdoor, coloured walls, studio. After removing the background, select White as the fill colour, then use any resizer on this site to get the exact pixel dimensions and KB limit your exam requires.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q-btn">What background colours can I choose? <span class="faq-chevron">⌄</span></button>
+      <div class="faq-answer">White (required for most government forms), transparent (saves as PNG), light grey, light blue, and any custom colour via the colour picker. Always use white for Aadhar, PAN, Passport, MPSC, SSC, IBPS and other official documents.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q-btn">The edges look rough around my hair. What can I do? <span class="faq-chevron">⌄</span></button>
+      <div class="faq-answer">AI edge quality depends on the original photo. For best results: use good lighting, avoid busy backgrounds, and ensure the background is clearly different from your clothing. If edges still look rough on the white background, the examiner usually cannot notice at passport photo resolution (125–200 px wide).</div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo-name">FormPhoto<span class="logo-tld">Resize.in</span></div>
+      <p>Free AI-powered photo tools for Indian government forms. 100% browser-based.</p>
+    </div>
+    <div class="footer-links">
+      <a href="../tools/remove-background.html">Remove Background</a>
+      <a href="../tools/heic-to-jpg.html">HEIC → JPG</a>
+      <a href="../tools/photo-validator.html">Photo Validator</a>
+      <a href="../maharashtra/mpsc-photo-resizer.html">MPSC Photo</a>
+      <a href="../">All Tools</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 FormPhotoResize.in — All processing is local. Zero data stored.</span>
+    <span>🔒 Privacy First</span>
+  </div>
+</footer>
+
+<!-- Nav toggle -->
+<script>
+  document.getElementById('nav-toggle').addEventListener('click', () => {
+    document.getElementById('site-nav').classList.toggle('open');
+  });
+</script>
+
+<!-- FAQ accordion -->
+<script>
+  document.querySelectorAll('.faq-q-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+</script>
+
+<!-- Star rating (v2 hook) -->
+<script>
+  const stars = document.querySelectorAll('.star-btn');
+  const ratingThanks = document.getElementById('rating-thanks');
+  stars.forEach(star => {
+    star.addEventListener('mouseover', () => {
+      const v = +star.dataset.v;
+      stars.forEach(s => s.classList.toggle('lit', +s.dataset.v <= v));
+    });
+    star.addEventListener('mouseout', () => {
+      if (ratingThanks.style.display !== 'block')
+        stars.forEach(s => s.classList.remove('lit'));
+    });
+    star.addEventListener('click', () => {
+      const v = +star.dataset.v;
+      stars.forEach(s => s.classList.toggle('lit', +s.dataset.v <= v));
+      ratingThanks.style.display = 'block';
+    });
+  });
+</script>
+
+<!-- Share buttons (v2 hook) -->
+<script>
+  const shareWa   = document.getElementById('share-wa');
+  const shareCopy = document.getElementById('share-copy');
+  if (shareWa) shareWa.addEventListener('click', () => {
+    window.open('https://wa.me/?text=' + encodeURIComponent('Free AI background remover for government photos: ' + location.href), '_blank');
+  });
+  if (shareCopy) shareCopy.addEventListener('click', function () {
+    navigator.clipboard.writeText(location.href).then(() => {
+      shareCopy.textContent = '✅ Copied!';
+      setTimeout(() => { shareCopy.innerHTML = '🔗 Copy Link'; }, 2000);
+    });
+  });
+</script>
+
+<!-- ============================================================
+     CORE AI BACKGROUND REMOVAL ENGINE
+     Uses @huggingface/transformers.js with RMBG-1.4 model
+     Runs 100% in-browser via WebGPU / WASM fallback
+============================================================ -->
+<script type="module">
+  /*
+   * Background removal using @xenova/transformers v2 (Xenova era).
+   * Xenova models are served from Hugging Face's main CDN — no XetHub/cas-bridge proxy.
+   * This works on localhost AND live Netlify/GitHub Pages with zero CORS issues.
+   *
+   * Model: briaai/RMBG-1.4 (quantized q8, ~45 MB)
+   * Accuracy is excellent for portrait/government photos.
+   */
+  import { AutoModel, AutoProcessor, RawImage, env }
+    from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2/dist/transformers.min.js';
+
+  env.allowLocalModels  = false;
+  env.allowRemoteModels = true;
+  env.backends.onnx.wasm.proxy      = false;
+  env.backends.onnx.wasm.numThreads = 1;
+
+  const MODEL_ID   = 'briaai/RMBG-1.4';
+  const MODEL_OPTS = { quantized: true };
+
+  /* ── DOM refs ── */
+  const fileInput    = document.getElementById('file-input');
+  const uploadZone   = document.getElementById('upload-zone');
+  const uploadIcon   = document.getElementById('upload-icon');
+  const uploadTitle  = document.getElementById('upload-title');
+  const btnRemove    = document.getElementById('btn-remove');
+  const btnDownload  = document.getElementById('btn-download');
+  const btnResizeAfter = document.getElementById('btn-resize-after');
+  const progressWrap = document.getElementById('ai-progress');
+  const progressFill = document.getElementById('progress-fill');
+  const progressLbl  = document.getElementById('progress-label');
+  const progressPct  = document.getElementById('progress-pct');
+  const boxOriginal  = document.getElementById('box-original');
+  const boxResult    = document.getElementById('box-result');
+  const canvasRow    = document.getElementById('canvas-row');
+  const bgOptions    = document.getElementById('bg-options');
+  const shareRow     = document.getElementById('share-row');
+  const ratingBox    = document.getElementById('rating-box');
+
+  /* ── State ── */
+  let model       = null;
+  let processor   = null;
+  let maskData    = null;   // ImageData of the alpha mask
+  let origImg     = null;   // HTMLImageElement
+  let bgColor     = 'white';
+  let outputBlob  = null;
+
+  /* ── Upload handling ── */
+  uploadZone.addEventListener('click', () => fileInput.click());
+  uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag'); });
+  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag'));
+  uploadZone.addEventListener('drop', e => {
+    e.preventDefault(); uploadZone.classList.remove('drag');
+    const f = e.dataTransfer.files[0];
+    if (f && f.type.startsWith('image/')) loadImage(f);
+  });
+  fileInput.addEventListener('change', () => { if (fileInput.files[0]) loadImage(fileInput.files[0]); });
+
+  function loadImage(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      origImg = new Image();
+      origImg.onload = () => {
+        /* Show original in canvas-row */
+        boxOriginal.innerHTML = `<img src="${e.target.result}" alt="Original"><div class="canvas-box-label">Original</div>`;
+        boxResult.innerHTML   = `<div class="canvas-placeholder"><div class="ph-icon">✨</div><p>Click Remove Background</p></div><div class="canvas-box-label">Background Removed</div>`;
+        canvasRow.style.display = 'grid';
+        bgOptions.style.display = 'flex';
+
+        uploadZone.classList.add('loaded');
+        uploadIcon.textContent  = '✅';
+        uploadTitle.textContent = file.name;
+        btnRemove.disabled      = false;
+        maskData = null;
+        btnDownload.style.display = 'none';
+        btnResizeAfter.classList.remove('show');
+        shareRow.style.display    = 'none';
+        ratingBox.style.display   = 'none';
+      };
+      origImg.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  /* ── BG colour swatches ── */
+  document.querySelectorAll('.bg-swatch').forEach(s => {
+    s.addEventListener('click', () => {
+      document.querySelectorAll('.bg-swatch').forEach(x => x.classList.remove('active'));
+      s.classList.add('active');
+      bgColor = s.dataset.bg;
+      if (maskData) renderResult(); // re-render with new bg
+    });
+  });
+  document.getElementById('bg-color-picker').addEventListener('input', e => {
+    document.querySelectorAll('.bg-swatch').forEach(x => x.classList.remove('active'));
+    bgColor = e.target.value;
+    if (maskData) renderResult();
+  });
+
+  /* ── Remove button ── */
+  btnRemove.addEventListener('click', async () => {
+    if (!origImg) return;
+    btnRemove.disabled = true;
+    btnRemove.textContent = '⏳ Processing…';
+    progressWrap.classList.add('show');
+
+    try {
+      /* Load model if not cached */
+      if (!model) {
+        setProgress(5, 'Downloading AI model (first use only)…');
+        model     = await AutoModel.from_pretrained(MODEL_ID, { ...MODEL_OPTS, progress_callback: onModelProgress });
+        processor = await AutoProcessor.from_pretrained(MODEL_ID, { quantized: false });
+        setProgress(95, 'Model ready — running on your photo…');
+      } else {
+        setProgress(50, 'Running AI on your photo…');
+      }
+
+      /* Run inference */
+      const rawImg   = await RawImage.fromURL(origImg.src);
+      const inputs   = await processor(rawImg);
+      const { output } = await model(inputs);
+
+      /* Post-process mask */
+      const maskTensor = output[0].squeeze();
+      const maskArr    = await maskTensor.toArray();
+      const h = maskArr.length, w = maskArr[0].length;
+
+      maskData = { width: w, height: h, flat: new Float32Array(h * w) };
+      for (let y = 0; y < h; y++)
+        for (let x = 0; x < w; x++)
+          maskData.flat[y * w + x] = maskArr[y][x];
+
+      setProgress(100, 'Done!');
+      renderResult();
+
+      btnRemove.textContent = '✨ Remove Again';
+      btnRemove.disabled    = false;
+      btnDownload.style.display = 'flex';
+      btnResizeAfter.classList.add('show');
+      shareRow.style.display  = 'flex';
+      ratingBox.style.display = 'block';
+
+      setTimeout(() => progressWrap.classList.remove('show'), 800);
+
+    } catch (err) {
+      console.error(err);
+      progressLbl.textContent = '❌ Error: ' + (err.message || 'Unknown error');
+      setProgress(0, '❌ Failed — try a smaller image or reload the page');
+      btnRemove.disabled    = false;
+      btnRemove.textContent = '✨ Try Again';
+    }
+  });
+
+  /* ── Render result onto canvas with chosen bg ── */
+  function renderResult() {
+    if (!maskData || !origImg) return;
+
+    const canvas = document.createElement('canvas');
+    canvas.width  = origImg.naturalWidth;
+    canvas.height = origImg.naturalHeight;
+    const ctx = canvas.getContext('2d');
+
+    /* Fill background */
+    if (bgColor !== 'none') {
+      ctx.fillStyle = bgColor === 'white' ? '#FFFFFF' : bgColor;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    /* Draw original */
+    ctx.drawImage(origImg, 0, 0, canvas.width, canvas.height);
+
+    /* Apply mask — scale mask to canvas size */
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const { width: mW, height: mH, flat } = maskData;
+    const scaleX = mW / canvas.width;
+    const scaleY = mH / canvas.height;
+
+    for (let y = 0; y < canvas.height; y++) {
+      for (let x = 0; x < canvas.width; x++) {
+        const mx = Math.min(Math.round(x * scaleX), mW - 1);
+        const my = Math.min(Math.round(y * scaleY), mH - 1);
+        const alpha = flat[my * mW + mx]; // 0–1
+        const i = (y * canvas.width + x) * 4;
+        if (bgColor === 'none') {
+          imgData.data[i + 3] = Math.round(alpha * 255);
+        } else {
+          /* Blend: fg * alpha + bg * (1 - alpha) already done via fill, just set alpha */
+          const bg = hexToRgb(bgColor === 'white' ? '#FFFFFF' : bgColor);
+          imgData.data[i]     = Math.round(imgData.data[i]     * alpha + bg[0] * (1 - alpha));
+          imgData.data[i + 1] = Math.round(imgData.data[i + 1] * alpha + bg[1] * (1 - alpha));
+          imgData.data[i + 2] = Math.round(imgData.data[i + 2] * alpha + bg[2] * (1 - alpha));
+          imgData.data[i + 3] = 255;
+        }
+      }
+    }
+    ctx.putImageData(imgData, 0, 0);
+
+    /* Show in result box */
+    const resultClass = bgColor === 'none' ? 'canvas-box transparent-bg' : 'canvas-box';
+    boxResult.className = resultClass;
+    boxResult.innerHTML = `<canvas id="result-canvas"></canvas><div class="canvas-box-label">Background Removed</div>`;
+    const rc = document.getElementById('result-canvas');
+    rc.width  = canvas.width;
+    rc.height = canvas.height;
+    rc.getContext('2d').drawImage(canvas, 0, 0);
+
+    /* Prep download blob */
+    const fmt = bgColor === 'none' ? 'image/png' : 'image/jpeg';
+    canvas.toBlob(blob => {
+      outputBlob = blob;
+      const ext  = bgColor === 'none' ? 'png' : 'jpg';
+      btnDownload.onclick = () => {
+        const a = document.createElement('a');
+        a.href     = URL.createObjectURL(blob);
+        a.download = 'photo-white-bg.' + ext;
+        a.click();
+        URL.revokeObjectURL(a.href);
+      };
+    }, fmt, 0.95);
+  }
+
+  /* ── Helpers ── */
+  function setProgress(pct, label) {
+    progressFill.style.width  = pct + '%';
+    progressPct.textContent   = pct + '%';
+    progressLbl.textContent   = label;
+  }
+
+  function onModelProgress(p) {
+    if (p.status === 'progress') {
+      const pct = Math.round((p.loaded / p.total) * 85);
+      setProgress(pct, `Downloading AI model… ${pct}%`);
+    }
+  }
+
+  function hexToRgb(hex) {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return [r, g, b];
+  }
+</script>
+
+</body>
+</html>
