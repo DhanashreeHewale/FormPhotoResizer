@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Blog – Government Exam Photo Tips & Guides | FormPhotoResizer.in</title>
+  <meta name="description" content="Tips, guides and fixes for government exam photo requirements. Learn why photos get rejected and how to fix them for MPSC, SSC, UPSC, IBPS, Passport and more.">
+  <meta name="keywords" content="government exam photo tips, mpsc photo rejected, ssc photo requirements, upsc photo guide, passport photo tips india, exam photo size guide">
+
+  <link rel="canonical" href="https://formphotoresizer.in/blog/">
+  <meta property="og:title"       content="Blog — Government Exam Photo Tips & Guides">
+  <meta property="og:description" content="Why photos get rejected and how to fix them. Guides for MPSC, SSC, UPSC, IBPS and more.">
+  <meta property="og:type"        content="website">
+  <meta property="og:url"         content="https://formphotoresizer.in/blog/">
+
+  <link rel="stylesheet" href="../assets/style.css">
+
+  <style>
+    .blog-hero {
+      background: var(--navy);
+      border-radius: var(--r-xl);
+      padding: 32px 28px;
+      margin-bottom: 32px;
+    }
+    .blog-hero h1 {
+      font-size: clamp(22px, 4vw, 30px);
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .blog-hero p { font-size: 14px; color: #94A3B8; max-width: 480px; line-height: 1.65; }
+
+    /* Post card */
+    .post-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .post-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      transition: border-color var(--t), box-shadow var(--t), transform var(--t);
+    }
+    .post-card:hover {
+      border-color: var(--saffron-mid);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    .post-card-thumb {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 52px;
+      flex-shrink: 0;
+    }
+    .post-card-thumb.orange { background: linear-gradient(135deg, #FFF7ED, #FDBA74); }
+    .post-card-thumb.blue   { background: linear-gradient(135deg, #EFF6FF, #BFDBFE); }
+    .post-card-thumb.green  { background: linear-gradient(135deg, #F0FDF4, #BBF7D0); }
+    .post-card-thumb.purple { background: linear-gradient(135deg, #F5F3FF, #DDD6FE); }
+
+    .post-card-body { padding: 18px 18px 20px; flex: 1; display: flex; flex-direction: column; }
+    .post-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      border-radius: 99px;
+      padding: 3px 9px;
+      margin-bottom: 10px;
+    }
+    .post-tag.mpsc    { background: var(--saffron-light); color: var(--saffron); }
+    .post-tag.general { background: var(--blue-bg); color: var(--blue); }
+    .post-tag.ai      { background: #EDE9FE; color: #7C3AED; }
+    .post-tag.guide   { background: var(--green-bg); color: var(--green); }
+
+    .post-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.35;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+    .post-excerpt { font-size: 13px; color: var(--muted); line-height: 1.6; flex: 1; }
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .post-date  { font-size: 11px; color: var(--muted-light); }
+    .post-read  { font-size: 11px; color: var(--muted-light); margin-left: auto; }
+    .post-arrow { font-size: 13px; color: var(--saffron); font-weight: 700; }
+
+    /* Coming soon card */
+    .post-card.coming-soon {
+      opacity: 0.55;
+      pointer-events: none;
+    }
+    .coming-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      background: var(--bg);
+      color: var(--muted);
+      border-radius: 99px;
+      padding: 3px 9px;
+      margin-bottom: 10px;
+      border: 1px solid var(--border);
+    }
+
+    /* Newsletter strip */
+    .newsletter-strip {
+      background: var(--navy);
+      border-radius: var(--r-lg);
+      padding: 24px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+    .newsletter-strip h3 { font-size: 16px; font-weight: 700; color: white; margin-bottom: 4px; }
+    .newsletter-strip p  { font-size: 13px; color: #94A3B8; }
+    .newsletter-form {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+    .newsletter-form input {
+      border: 1.5px solid var(--navy-700);
+      border-radius: var(--r-sm);
+      padding: 9px 14px;
+      font-size: 13px;
+      font-family: inherit;
+      background: var(--navy-800);
+      color: white;
+      outline: none;
+      min-width: 200px;
+    }
+    .newsletter-form input::placeholder { color: var(--muted-light); }
+    .newsletter-form input:focus { border-color: var(--saffron); }
+    .newsletter-form button {
+      background: var(--saffron);
+      color: white;
+      border: none;
+      border-radius: var(--r-sm);
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      white-space: nowrap;
+      transition: opacity 0.15s;
+    }
+    .newsletter-form button:hover { opacity: 0.9; }
+    @media (max-width: 600px) { .newsletter-strip { flex-direction: column; align-items: flex-start; } .newsletter-form { margin-left: 0; width: 100%; } .newsletter-form input { min-width: 0; flex: 1; } }
+  </style>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Blog","name":"FormPhotoResizer.in Blog","url":"https://formphotoresizer.in/blog/","description":"Tips and guides on government exam photo requirements, resizing, and portal upload errors."}
+  </script>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../" class="site-logo">
+      <div class="logo-mark">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="28" height="28" aria-hidden="true">
+          <rect width="200" height="200" rx="40" fill="#0F172A"/>
+          <rect x="30" y="70" width="140" height="100" rx="14" fill="none" stroke="#F97316" stroke-width="9"/>
+          <circle cx="100" cy="118" r="34" fill="none" stroke="#F97316" stroke-width="9"/>
+          <circle cx="100" cy="118" r="18" fill="#F97316" opacity="0.85"/>
+          <rect x="72" y="55" width="56" height="22" rx="8" fill="#F97316"/>
+          <circle cx="148" cy="88" r="7" fill="#F97316" opacity="0.6"/>
+        </svg>
+      </div>
+      <div>
+        <span class="logo-name">FormPhoto<span class="logo-tld">Resizer.in</span></span>
+        <span class="logo-tagline">Free · Private · Instant</span>
+      </div>
+    </a>
+    <nav class="site-nav" id="site-nav">
+      <a href="../maharashtra/mpsc-photo-resizer.html" class="nav-link">Maharashtra</a>
+      <a href="../exams/upsc-photo-resizer.html"       class="nav-link">Exams</a>
+      <a href="../tools/remove-background.html"        class="nav-link">AI Tools</a>
+      <a href="../blog/"                               class="nav-link active">Blog</a>
+      <a href="../"                                    class="nav-link">All Tools</a>
+    </nav>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Open menu">☰</button>
+  </div>
+</header>
+
+<main class="page-wrap">
+
+  <!-- Hero -->
+  <div class="blog-hero">
+    <div class="page-eyebrow" style="margin-bottom:10px;">Guides & Tips</div>
+    <h1>Photo Tips for Government Exams</h1>
+    <p>Why do portals reject photos? What's the exact spec for your exam? How do you fix it in 60 seconds? All answers here.</p>
+  </div>
+
+  <!-- Posts grid -->
+  <div class="section-label">Latest Articles</div>
+  <div class="post-grid">
+
+    <!-- Post 1 — Live -->
+    <a href="../blog/mpsc-photo-rejected.html" class="post-card">
+      <div class="post-card-thumb orange">📋</div>
+      <div class="post-card-body">
+        <span class="post-tag mpsc">MPSC</span>
+        <div class="post-title">MPSC photo rejected? Here are the 7 most common reasons</div>
+        <div class="post-excerpt">Your photo passed the size check but the portal still rejected it. Here's exactly why — and the one-click fix for each reason.</div>
+        <div class="post-meta">
+          <span class="post-date">June 2026</span>
+          <span class="post-read">5 min read</span>
+          <span class="post-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Post 2 — Coming soon -->
+    <div class="post-card coming-soon">
+      <div class="post-card-thumb blue">📑</div>
+      <div class="post-card-body">
+        <span class="coming-badge">Coming soon</span>
+        <div class="post-title">SSC CGL photo requirements 2026 — complete checklist</div>
+        <div class="post-excerpt">Everything you need to know about photo and signature specs for SSC CGL, CHSL, MTS and GD Constable in one page.</div>
+        <div class="post-meta">
+          <span class="post-date">July 2026</span>
+          <span class="post-read">4 min read</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Post 3 — Coming soon -->
+    <div class="post-card coming-soon">
+      <div class="post-card-thumb green">🪄</div>
+      <div class="post-card-body">
+        <span class="coming-badge">Coming soon</span>
+        <div class="post-title">How to remove background from your photo for free — no Photoshop needed</div>
+        <div class="post-excerpt">A step-by-step guide to getting a white background on your photo using AI — works 100% in your browser.</div>
+        <div class="post-meta">
+          <span class="post-date">July 2026</span>
+          <span class="post-read">3 min read</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Post 4 — Coming soon -->
+    <div class="post-card coming-soon">
+      <div class="post-card-thumb purple">🏦</div>
+      <div class="post-card-body">
+        <span class="coming-badge">Coming soon</span>
+        <div class="post-title">IBPS PO 2026 photo guide — avoid rejection on the portal</div>
+        <div class="post-excerpt">The IBPS portal requires three uploads: photo, signature and thumb impression. Here's the exact spec for all three.</div>
+        <div class="post-meta">
+          <span class="post-date">August 2026</span>
+          <span class="post-read">4 min read</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Newsletter -->
+  <div class="newsletter-strip">
+    <div>
+      <h3>Get notified when new guides are published</h3>
+      <p>One email per month. No spam. Unsubscribe anytime.</p>
+    </div>
+    <form class="newsletter-form" onsubmit="handleSubscribe(event)">
+      <input type="email" placeholder="your@email.com" required id="nl-email">
+      <button type="submit">Notify me</button>
+    </form>
+  </div>
+
+  <!-- Related tools -->
+  <div class="related-strip">
+    <h3>Fix your photo right now</h3>
+    <div class="related-links">
+      <a href="../maharashtra/mpsc-photo-resizer.html"  class="related-link">📋 MPSC Resizer</a>
+      <a href="../exams/ssc-photo-resizer.html"         class="related-link">📑 SSC Resizer</a>
+      <a href="../tools/remove-background.html"         class="related-link">🪄 Remove Background</a>
+      <a href="../tools/photo-validator.html"           class="related-link">✅ Photo Validator</a>
+      <a href="../kb/50kb-image-resizer.html"           class="related-link">🗜️ 50 KB Resizer</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo-name">FormPhoto<span class="logo-tld">Resizer.in</span></div>
+      <p>Free government form photo resizer for Indian exams. 100% browser-based — your photos never leave your device.</p>
+    </div>
+    <div class="footer-links">
+      <a href="../maharashtra/mpsc-photo-resizer.html">MPSC Photo</a>
+      <a href="../exams/upsc-photo-resizer.html">UPSC Photo</a>
+      <a href="../exams/ssc-photo-resizer.html">SSC Photo</a>
+      <a href="../tools/remove-background.html">Remove BG</a>
+      <a href="../">Home</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 FormPhotoResizer.in — All processing is local. Zero data stored.</span>
+    <span>🔒 Privacy First</span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('nav-toggle').addEventListener('click', () => {
+    document.getElementById('site-nav').classList.toggle('open');
+  });
+
+  function handleSubscribe(e) {
+    e.preventDefault();
+    const btn   = e.target.querySelector('button');
+    const email = document.getElementById('nl-email').value;
+    btn.textContent = '✅ Subscribed!';
+    btn.style.background = 'var(--green)';
+    setTimeout(() => { btn.textContent = 'Notify me'; btn.style.background = ''; }, 3000);
+    /* In production: POST to your email service (Mailchimp, ConvertKit, etc.) */
+    console.log('Subscribe:', email);
+  }
+</script>
+
+</body>
+</html>

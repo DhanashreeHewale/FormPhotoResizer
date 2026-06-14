@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>AI Face Auto-Crop — Auto-Centre Your Photo for Government Forms | FormPhotoResizer.in</title>
+  <meta name="description" content="Free AI tool that automatically detects your face and centres it for Aadhar, PAN, Passport, MPSC, SSC and other government form photos. 100% in-browser, no upload.">
+  <meta name="keywords" content="auto crop face photo, ai photo centre face, passport photo face crop, government photo face not centred, mpsc photo face centre, auto face detection photo">
+
+  <link rel="canonical" href="https://formphotoresizer.in/tools/auto-face-crop.html">
+  <meta property="og:title"       content="AI Face Auto-Crop — Free, In-Browser, Instant">
+  <meta property="og:description" content="Automatically detects and centres your face, then resizes for any government form. Free, private, no upload needed.">
+  <meta property="og:type"        content="website">
+  <meta property="og:url"         content="https://formphotoresizer.in/tools/auto-face-crop.html">
+
+  <link rel="stylesheet" href="../assets/style.css">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "AI Face Auto-Crop",
+    "url": "https://formphotoresizer.in/tools/auto-face-crop.html",
+    "description": "Detects the face in a photo using AI and automatically centres and crops it to the correct ratio for government form photos, then resizes to the selected exam preset.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+  }
+  </script>
+
+  <style>
+    .ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #7C3AED, #4F46E5);
+      color: white;
+      border-radius: 99px;
+      padding: 4px 12px;
+      letter-spacing: 0.04em;
+      margin-bottom: 14px;
+    }
+
+    .how-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 520px) { .how-steps { grid-template-columns: 1fr; } }
+
+    .how-step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 16px 14px;
+      text-align: center;
+    }
+    .how-step-num {
+      width: 28px; height: 28px;
+      background: var(--saffron);
+      color: white;
+      border-radius: 50%;
+      font-size: 13px;
+      font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 8px;
+    }
+    .how-step-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .how-step-sub   { font-size: 11px; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../" class="site-logo">
+      <div class="logo-mark">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="28" height="28" aria-hidden="true">
+          <rect width="200" height="200" rx="40" fill="#0F172A"/>
+          <rect x="30" y="70" width="140" height="100" rx="14" fill="none" stroke="#F97316" stroke-width="9"/>
+          <circle cx="100" cy="118" r="34" fill="none" stroke="#F97316" stroke-width="9"/>
+          <circle cx="100" cy="118" r="18" fill="#F97316" opacity="0.85"/>
+          <rect x="72" y="55" width="56" height="22" rx="8" fill="#F97316"/>
+          <circle cx="148" cy="88" r="7" fill="#F97316" opacity="0.6"/>
+        </svg>
+      </div>
+      <div>
+        <span class="logo-name">FormPhoto<span class="logo-tld">Resizer.in</span></span>
+        <span class="logo-tagline">Free · Private · Instant</span>
+      </div>
+    </a>
+    <nav class="site-nav" id="site-nav">
+      <a href="../tools/remove-background.html" class="nav-link">BG Remove</a>
+      <a href="../tools/auto-face-crop.html"     class="nav-link active">Face Auto-Crop</a>
+      <a href="../tools/photo-validator.html"    class="nav-link">Validator</a>
+      <a href="../maharashtra/mpsc-photo-resizer.html" class="nav-link">Maharashtra</a>
+      <a href="../" class="nav-link">All Tools</a>
+    </nav>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Open menu">☰</button>
+  </div>
+</header>
+
+<main class="page-wrap">
+
+  <!-- Hero -->
+  <div class="page-hero">
+    <span class="ai-badge">✨ AI-Powered · Runs On-Device</span>
+    <div class="page-eyebrow">AI Tools</div>
+    <h1 class="page-title">AI Face Auto-Crop</h1>
+    <p class="page-subtitle">Is your face off-centre, too small, or too close to the edge of the frame? This tool uses on-device AI to detect your face, re-centre it with the correct padding for passport-style photos, and then resizes it to the exact spec for your form — Aadhar, PAN, Passport, MPSC, SSC and more.</p>
+  </div>
+
+  <div class="privacy-banner">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    Your photo never leaves your device — face detection and resizing both run locally in your browser.
+  </div>
+
+  <!-- How it works -->
+  <div class="section-label" style="margin-bottom:8px;">How it works</div>
+  <div class="how-steps">
+    <div class="how-step">
+      <div class="how-step-num">1</div>
+      <div class="how-step-title">Upload your photo</div>
+      <div class="how-step-sub">JPG or PNG, any size</div>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">2</div>
+      <div class="how-step-title">AI detects & centres face</div>
+      <div class="how-step-sub">Automatic — toggle on by default</div>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">3</div>
+      <div class="how-step-title">Pick a preset & download</div>
+      <div class="how-step-sub">Correctly sized, named & compressed</div>
+    </div>
+  </div>
+
+  <!-- Presets -->
+  <div class="section-label">Select document type</div>
+  <div class="preset-grid" id="preset-grid"></div>
+
+  <div class="info-note tip">
+    💡 <span>The "Auto-centre face with AI" toggle below the upload box is on by default. If your photo already has the face well-centred, you can switch it off to use the original framing instead.</span>
+  </div>
+
+  <!-- Upload -->
+  <div class="upload-zone" id="upload-zone">
+    <div class="upload-icon">📁</div>
+    <div class="upload-title">Click to upload or drag & drop</div>
+    <div class="upload-sub">JPG, PNG supported &nbsp;·&nbsp; Max 10 MB</div>
+    <div class="upload-hint">🔒 Photo never leaves your device</div>
+    <input type="file" id="file-input" accept="image/*">
+  </div>
+
+  <!-- Settings -->
+  <div class="settings-grid">
+    <div class="field">
+      <label class="field-label">Width (px)</label>
+      <input type="number" id="inp-w" value="200" min="10" max="3000">
+    </div>
+    <div class="field">
+      <label class="field-label">Height (px)</label>
+      <input type="number" id="inp-h" value="200" min="10" max="3000">
+    </div>
+    <div class="field">
+      <label class="field-label">Format</label>
+      <select id="inp-fmt">
+        <option value="jpeg" selected>JPEG</option>
+        <option value="png">PNG</option>
+      </select>
+    </div>
+  </div>
+  <div class="quality-wrap">
+    <div class="field-label">Quality / Compression</div>
+    <div class="quality-row">
+      <input type="range" id="inp-q" min="10" max="100" value="80">
+      <span class="quality-val" id="q-display">80%</span>
+    </div>
+  </div>
+  <!-- Target KB (wired to binary-search compression in tool.js) -->
+  <div class="target-kb-row" style="display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap;">
+    <label for="inp-kb" style="font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap;">Target max size:</label>
+    <input type="number" id="inp-kb" min="1" max="5000" value="50"
+           style="width:80px;border:1px solid var(--border);border-radius:5px;padding:7px 10px;font-size:14px;font-family:inherit;outline:none;">
+    <span style="font-size:13px;color:var(--muted);">KB</span>
+    <span style="font-size:11px;color:var(--hint);">(auto-adjusts quality to hit this limit)</span>
+  </div>
+
+  <button class="btn-process" id="btn-process" disabled>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="2"/>
+      <path d="M8 12h8M12 8l4 4-4 4"/>
+    </svg>
+    Crop & Resize Photo
+  </button>
+
+  <!-- Result -->
+  <div class="result-card" id="result-card">
+    <div class="result-header">
+      Result
+      <span class="result-badge" id="result-badge">Ready to download</span>
+    </div>
+    <div class="result-body">
+      <div class="preview-row">
+        <div class="preview-box">
+          <img id="orig-preview" src="" alt="Face-cropped photo">
+          <div class="preview-box-label">Face-cropped <span class="size-tag" id="orig-label">—</span></div>
+        </div>
+        <div class="preview-box">
+          <img id="out-preview" src="" alt="Resized photo">
+          <div class="preview-box-label">Resized <span class="size-tag" id="out-label">—</span></div>
+        </div>
+      </div>
+      <div id="validation-strip" class="validation-strip" style="display:none;"></div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="s-label">Original</div><div class="s-val" id="stat-orig">—</div></div>
+        <div class="stat-box"><div class="s-label">New size</div><div class="s-val" id="stat-new">—</div></div>
+        <div class="stat-box success"><div class="s-label">Saved</div><div class="s-val" id="stat-saved">—</div></div>
+        <div class="stat-box"><div class="s-label">Dimensions</div><div class="s-val" id="stat-dim">—</div></div>
+      </div>
+      <button class="btn-download" id="btn-download">⬇ Download Photo</button>
+      <div class="btn-filename" id="dl-filename"></div>
+    </div>
+  </div>
+
+  <!-- Related tools -->
+  <div class="related-strip">
+    <h3>Related tools</h3>
+    <div class="related-links">
+      <a href="../tools/remove-background.html"        class="related-link">🪄 Remove Background</a>
+      <a href="../tools/photo-validator.html"          class="related-link">✅ Photo Validator</a>
+      <a href="../maharashtra/mpsc-photo-resizer.html"  class="related-link">📋 MPSC Resizer</a>
+      <a href="../exams/upsc-photo-resizer.html"        class="related-link">🎓 UPSC Resizer</a>
+      <a href="../kb/50kb-image-resizer.html"           class="related-link">🗜️ 50 KB Resizer</a>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq-section">
+    <h2>AI Face Auto-Crop — Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+      <button class="faq-q-btn">How does the AI know where my face is? <span class="faq-chevron">⌄</span></button>
+      <div class="faq-answer">The tool uses a small on-device face detection model (TinyFaceDetector via face-api.js) that runs entirely in your browser. It finds the largest face in the photo and calculates a crop region with the correct padding above the head and below the chin — the standard framing required for passport-style photos.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q-btn">What if no face is detected? <span class="faq-chevron">⌄</span></button>
+      <div class="faq-answer">If the AI can't confidently detect a face — for example in a very dark, blurry, or heavily cropped photo — it falls back to using your original photo unchanged, and you'll see a small notice under the upload box. You can still resize and download normally.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q-btn">Can I turn off the auto-crop and use my own framing? <span class="faq-chevron">⌄</span></button>
+      <div class="faq-answer">Yes. Untick "Auto-centre face with AI" below the upload box before or after uploading. The tool will re-process your original photo without face detection, using the standard centre-crop instead.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q-btn">Does this work for every exam preset? <span class="faq-chevron">⌄</span></button>
+      <div class="faq-answer">Yes. Auto-crop runs first, then the cropped photo is resized and compressed to whichever preset you choose — Aadhar, PAN, Passport, MPSC, SSC, UPSC, IBPS and more all use the same crop, just at different output dimensions and KB limits.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q-btn">Is my photo uploaded anywhere? <span class="faq-chevron">⌄</span></button>
+      <div class="faq-answer">No. Both face detection and resizing happen locally using your browser's Canvas API and an on-device AI model. The model files are fetched once from a CDN, but your photo itself is never sent anywhere.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q-btn">Why is the first detection a bit slow? <span class="faq-chevron">⌄</span></button>
+      <div class="faq-answer">The first time you use this tool in a session, your browser downloads a small (~190 KB) face detection model. After that, detection on subsequent photos is near-instant.</div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo-name">FormPhoto<span class="logo-tld">Resizer.in</span></div>
+      <p>AI face auto-crop for government form photos. Free, private, instant. No server upload.</p>
+    </div>
+    <div class="footer-links">
+      <a href="../tools/remove-background.html">Remove BG</a>
+      <a href="../tools/photo-validator.html">Validator</a>
+      <a href="../maharashtra/mpsc-photo-resizer.html">MPSC Photo</a>
+      <a href="../exams/upsc-photo-resizer.html">UPSC Photo</a>
+      <a href="../">Home</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 FormPhotoResizer.in — All processing is local. Zero data stored.</span>
+    <span>🔒 Privacy First</span>
+  </div>
+</footer>
+
+<script>
+window.TOOL_CONFIG = {
+  examName: 'face',
+  presets: [
+    { id: 'aadhar',    icon: '🪪', name: 'Aadhar Card',    sizeLabel: '200 × 200 px', kbLabel: 'Max 50 KB',  w: 200, h: 200, maxKB: 50,  format: 'jpeg' },
+    { id: 'pan',       icon: '💳', name: 'PAN Card',        sizeLabel: '200 × 230 px', kbLabel: 'Max 20 KB',  w: 200, h: 230, maxKB: 20,  format: 'jpeg' },
+    { id: 'passport',  icon: '🛂', name: 'Passport Photo',  sizeLabel: '600 × 600 px', kbLabel: 'Max 500 KB', w: 600, h: 600, maxKB: 500, format: 'jpeg' },
+    { id: 'mpsc',      icon: '📋', name: 'MPSC Photo',      sizeLabel: '275 × 354 px', kbLabel: 'Max 50 KB',  w: 275, h: 354, maxKB: 50,  format: 'jpeg' },
+    { id: 'ssc',       icon: '📑', name: 'SSC Photo',       sizeLabel: '275 × 354 px', kbLabel: 'Max 50 KB',  w: 275, h: 354, maxKB: 50,  format: 'jpeg' },
+    { id: 'upsc',      icon: '🎓', name: 'UPSC Photo',      sizeLabel: '200 × 230 px', kbLabel: 'Max 300 KB', w: 200, h: 230, maxKB: 300, format: 'jpeg' },
+    { id: 'ibps',      icon: '🏦', name: 'IBPS Photo',      sizeLabel: '200 × 230 px', kbLabel: 'Max 50 KB',  w: 200, h: 230, maxKB: 50,  format: 'jpeg' },
+    { id: 'custom',    icon: '✏️', name: 'Custom Size',     sizeLabel: 'Enter below',  kbLabel: '—',          w: 200, h: 200, maxKB: null, format: 'jpeg' },
+  ],
+};
+</script>
+<script src="../assets/tool.js"></script>
+<script>
+  document.getElementById('nav-toggle').addEventListener('click', () => document.getElementById('site-nav').classList.toggle('open'));
+</script>
+
+</body>
+</html>
