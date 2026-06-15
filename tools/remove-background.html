@@ -4,15 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Remove Background from Photo Free – AI White Background for Government Forms | FormPhotoResizer.in</title>
+  <title>Remove Background from Photo Free – AI White Background for Government Forms | FormPhotoResize.in</title>
   <meta name="description" content="Remove photo background and replace with white instantly using AI — free, 100% in-browser, no upload. Perfect for Aadhar, PAN, Passport, MPSC and all government form photos.">
   <meta name="keywords" content="remove background photo free, white background photo online, ai background remover, government form photo white background, passport photo background remove, mpsc photo white background">
 
-  <link rel="canonical" href="https://formphotoresizer.in/tools/remove-background.html">
+  <link rel="canonical" href="https://formphotosize.in/tools/remove-background.html">
   <meta property="og:title"       content="AI Background Remover — Free, In-Browser, White Background">
   <meta property="og:description" content="Remove photo background and add white fill instantly using AI. Free, private, no upload needed.">
   <meta property="og:type"        content="website">
-  <meta property="og:url"         content="https://formphotoresizer.in/tools/remove-background.html">
+  <meta property="og:url"         content="https://formphotosize.in/tools/remove-background.html">
 
   <link rel="stylesheet" href="../assets/style.css">
 
@@ -281,9 +281,6 @@
       line-height: 1.5;
     }
   </style>
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebApplication","name":"AI Background Remover for Government Photos","url":"https://formphotoresizer.in/tools/remove-background.html","description":"Free AI background remover. Remove background from photo and add white background for Aadhar, PAN, MPSC, passport. Runs in browser, zero upload.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}}
-  </script>
 </head>
 <body>
 
@@ -302,13 +299,12 @@
         </svg>
       </div>
       <div>
-        <span class="logo-name">FormPhoto<span class="logo-tld">Resizer.in</span></span>
+        <span class="logo-name">FormPhoto<span class="logo-tld">Resize.in</span></span>
         <span class="logo-tagline">Free · Private · Instant</span>
       </div>
     </a>
     <nav class="site-nav" id="site-nav">
       <a href="../tools/remove-background.html" class="nav-link active">BG Remove</a>
-      <a href="../tools/auto-face-crop.html"     class="nav-link">Face Auto-Crop</a>
       <a href="../tools/heic-to-jpg.html"        class="nav-link">HEIC→JPG</a>
       <a href="../tools/photo-validator.html"    class="nav-link">Validator</a>
       <a href="../maharashtra/mpsc-photo-resizer.html" class="nav-link">Maharashtra</a>
@@ -352,7 +348,7 @@
   </div>
 
   <div class="model-notice">
-    🤖 <div><strong>First use:</strong> The AI model (~180 MB) downloads once to your browser cache. Subsequent uses are instant. This is what makes it 100% private — no server involved.</div>
+    🤖 <div><strong>First use : </strong>AI model downloads once and is stored in your browser for future use.</div>
   </div>
 
   <!-- Upload zone -->
@@ -490,7 +486,7 @@
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-brand">
-      <div class="logo-name">FormPhoto<span class="logo-tld">Resizer.in</span></div>
+      <div class="logo-name">FormPhoto<span class="logo-tld">Resize.in</span></div>
       <p>Free AI-powered photo tools for Indian government forms. 100% browser-based.</p>
     </div>
     <div class="footer-links">
@@ -502,7 +498,7 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2025 FormPhotoResizer.in — All processing is local. Zero data stored.</span>
+    <span>© 2025 FormPhotoResize.in — All processing is local. Zero data stored.</span>
     <span>🔒 Privacy First</span>
   </div>
 </footer>
@@ -564,20 +560,21 @@
 
 <!-- ============================================================
      CORE AI BACKGROUND REMOVAL ENGINE
-     Uses @huggingface/transformers.js with RMBG-1.4 model
+     Uses @huggingface/transformers.js v3 with RMBG-1.4 model
      Runs 100% in-browser via WebGPU / WASM fallback
 ============================================================ -->
 <script type="module">
   /*
-   * Background removal using @xenova/transformers v2 (Xenova era).
-   * Xenova models are served from Hugging Face's main CDN — no XetHub/cas-bridge proxy.
-   * This works on localhost AND live Netlify/GitHub Pages with zero CORS issues.
+   * Background removal using @huggingface/transformers v3.
+   * Fixed: v2 (@xenova) does not correctly handle RMBG-1.4's processor
+   * inputs, causing "Missing the following inputs: input" error.
+   * v3 properly maps processor outputs to model inputs.
    *
-   * Model: briaai/RMBG-1.4 (quantized q8, ~45 MB)
+   * Model: briaai/RMBG-1.4 (fp16, ~45 MB)
    * Accuracy is excellent for portrait/government photos.
    */
   import { AutoModel, AutoProcessor, RawImage, env }
-    from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2/dist/transformers.min.js';
+    from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.5.2/dist/transformers.min.js';
 
   env.allowLocalModels  = false;
   env.allowRemoteModels = true;
@@ -585,7 +582,7 @@
   env.backends.onnx.wasm.numThreads = 1;
 
   const MODEL_ID   = 'briaai/RMBG-1.4';
-  const MODEL_OPTS = { quantized: true };
+  const MODEL_OPTS = { dtype: 'fp16' };
 
   /* ── DOM refs ── */
   const fileInput    = document.getElementById('file-input');
@@ -677,21 +674,44 @@
       /* Load model if not cached */
       if (!model) {
         setProgress(5, 'Downloading AI model (first use only)…');
-        model     = await AutoModel.from_pretrained(MODEL_ID, { ...MODEL_OPTS, progress_callback: onModelProgress });
-        processor = await AutoProcessor.from_pretrained(MODEL_ID, { quantized: false });
+        // Load model - ignore_mismatched_sizes avoids the SegformerForSemanticSegmentation warning
+        model     = await AutoModel.from_pretrained(MODEL_ID, {
+          ...MODEL_OPTS,
+          progress_callback: onModelProgress,
+        });
+        processor = await AutoProcessor.from_pretrained(MODEL_ID);
         setProgress(95, 'Model ready — running on your photo…');
       } else {
         setProgress(50, 'Running AI on your photo…');
       }
 
-      /* Run inference */
-      const rawImg   = await RawImage.fromURL(origImg.src);
-      const inputs   = await processor(rawImg);
-      const { output } = await model(inputs);
+     /* Run inference */
 
-      /* Post-process mask */
-      const maskTensor = output[0].squeeze();
-      const maskArr    = await maskTensor.toArray();
+    // Resize image before AI processing
+    const resizedDataUrl = resizeForAI(origImg, 1024);
+
+    const rawImg = await RawImage.fromURL(resizedDataUrl);
+    const processed = await processor(rawImg);
+      // RMBG-1.4's ONNX model expects the input tensor under key "input",
+      // but transformers.js processors return it as "pixel_values".
+      // Rename manually to avoid "Missing the following inputs: input" error.
+      const inputs = {};
+      if ('input' in processed) {
+        Object.assign(inputs, processed);
+      } else if ('pixel_values' in processed) {
+        inputs.input = processed.pixel_values;
+      } else {
+        inputs.input = processed[Object.keys(processed)[0]];
+      }
+
+      const result = await model(inputs);
+
+      // RMBG-1.4 output: try 'output', 'logits', or first key
+      const outputTensor = result.output ?? result.logits ?? result[Object.keys(result)[0]];
+      const maskTensor = outputTensor.squeeze(); // shape [H, W]
+
+      // tolist() (v3) or toArray() (v2)
+      const maskArr = maskTensor.tolist ? maskTensor.tolist() : await maskTensor.toArray();
       const h = maskArr.length, w = maskArr[0].length;
 
       maskData = { width: w, height: h, flat: new Float32Array(h * w) };
@@ -808,6 +828,33 @@
     const b = parseInt(hex.slice(5, 7), 16);
     return [r, g, b];
   }
+
+  function resizeForAI(img, maxSize = 1024) {
+  const canvas = document.createElement('canvas');
+
+  let width = img.naturalWidth;
+  let height = img.naturalHeight;
+
+  if (width > height) {
+    if (width > maxSize) {
+      height = Math.round(height * (maxSize / width));
+      width = maxSize;
+    }
+  } else {
+    if (height > maxSize) {
+      width = Math.round(width * (maxSize / height));
+      height = maxSize;
+    }
+  }
+
+  canvas.width = width;
+  canvas.height = height;
+
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(img, 0, 0, width, height);
+
+  return canvas.toDataURL('image/jpeg', 0.9);
+}
 </script>
 
 </body>
