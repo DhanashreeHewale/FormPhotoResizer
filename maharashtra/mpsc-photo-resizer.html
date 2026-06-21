@@ -59,7 +59,7 @@
       <a href="../maharashtra/maharashtra-police-photo-resizer.html" class="nav-link">Police</a>
       <a href="../maharashtra/zp-bharti-photo-resizer.html"       class="nav-link">ZP Bharti</a>
       <a href="../maharashtra/mpsc-signature-resizer.html"        class="nav-link">Signature</a>
-      <a href="../"                                               class="nav-link">All Tools</a>
+      <a href="../"                                               class="nav-link">Home</a>
     </nav>
     <button class="nav-toggle" id="nav-toggle" aria-label="Open menu">☰</button>
   </div>
@@ -116,7 +116,7 @@
   <div class="preset-grid" id="preset-grid"></div>
 
   <div class="info-note warning">
-    ⚠️ <span>MPSC portal often rejects photos above 50 KB even if dimensions are correct. Use the quality slider to stay under the limit — the result panel shows exact KB after processing.</span>
+    📸 <span>For best results, use a clear photo with good lighting and a plain background. Adjust Brightness and Contrast if the image appears too dark or washed out.</span>
   </div>
 
   <!-- Upload -->
@@ -140,9 +140,8 @@
     </div>
     <div class="field">
       <label class="field-label">Format</label>
-      <select id="inp-fmt">
+      <select id="inp-fmt" disabled>
         <option value="jpeg" selected>JPEG</option>
-        <option value="png">PNG</option>
       </select>
     </div>
   </div>
@@ -221,18 +220,13 @@
     </div>
 
     <div class="faq-item">
-      <button class="faq-q-btn">Why does the MPSC portal say "file too large"? <span class="faq-chevron">⌄</span></button>
-      <div class="faq-answer">The MPSC portal enforces a strict 50 KB maximum. Even if your photo has the correct dimensions, a file above 50 KB will be rejected. After resizing, lower the quality slider to 70–80% and re-process until the result shows under 50 KB.</div>
-    </div>
-
-    <div class="faq-item">
       <button class="faq-q-btn">Can I use a PNG file for MPSC? <span class="faq-chevron">⌄</span></button>
       <div class="faq-answer">No. MPSC explicitly requires JPEG/JPG format. PNG files are not accepted on the portal. This tool outputs JPEG by default — do not change the format to PNG for MPSC uploads.</div>
     </div>
 
     <div class="faq-item">
       <button class="faq-q-btn">What background colour should the MPSC photo have? <span class="faq-chevron">⌄</span></button>
-      <div class="faq-answer">Plain white background is required. The tool automatically fills any transparent areas with white. For best results, use a photo taken against a white or off-white wall. If your background is coloured, use the <a  style="color:var(--saffron)">AI Background Remover</a> first.</div>
+      <div class="faq-answer">Plain white background is required. The tool automatically fills any transparent areas with white. For best results, use a photo taken against a white or off-white wall. If your background is coloured, use the <a href="../tools/remove-background.html" style="color:var(--saffron)">AI Background Remover</a> first.</div>
     </div>
 
     <div class="faq-item">
@@ -247,7 +241,14 @@
 
     <div class="faq-item">
       <button class="faq-q-btn">What is the MPSC signature size? <span class="faq-chevron">⌄</span></button>
-      <div class="faq-answer">MPSC signature must be 3.5 × 1.5 cm (approximately 140 × 60 px), JPEG format, max 20 KB. Use the dedicated <a href="../maharashtra/mpsc-signature-resizer.html" style="color:var(--saffron)">MPSC Signature Resizer</a> page for the exact preset.</div>
+      <div class="faq-answer">MPSC signature must be 3.5 × 1.5 cm (approximately 150 × 60 px), JPEG format, max 20 KB. Use the dedicated <a href="../maharashtra/mpsc-signature-resizer.html" style="color:var(--saffron)">MPSC Signature Resizer</a> page for the exact preset.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q-btn">Will Brightness and Contrast affect exam photo requirements? <span class="faq-chevron">⌄</span></button>
+      <div class="faq-answer">
+        No. Brightness and Contrast only improve the appearance of your photo. They do not change the required dimensions, aspect ratio, or photo specifications. For best results, keep adjustments minimal so your photo remains natural and clearly visible.
+      </div>
     </div>
   </div>
 
@@ -278,8 +279,7 @@ window.TOOL_CONFIG = {
   examName: 'mpsc',
   presets: [
     { id: 'mpsc-photo', filename: 'mpscphoto',   icon: '📋', name: 'MPSC Photo',     sizeLabel: '275 × 354 px', kbLabel: 'Max 50 KB', w: 275, h: 354, maxKB: 50, format: 'jpeg' },
-    { id: 'mpsc-photo', icon: '📋', name: 'MPSC Photo (HQ)', sizeLabel: '275 × 354 px', kbLabel: 'Max 50 KB', w: 275, h: 354, maxKB: 50, format: 'jpeg' },
-    { id: 'mpsc-sig', filename: 'mpscsign', icon: '✍️', name: 'MPSC Signature',  sizeLabel: '275 × 118 px', kbLabel: 'Max 50 KB', w: 275, h: 118, maxKB: 50, format: 'jpeg' },
+    { id: 'mpsc-sign', filename: 'mpscsign', icon: '✍️', name: 'MPSC Signature',  sizeLabel: '150 × 60 px', kbLabel: 'Max 20 KB', w: 150, h: 60, maxKB: 20, format: 'jpeg' },
   ],
 };
 </script>

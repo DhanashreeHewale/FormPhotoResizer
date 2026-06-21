@@ -12,7 +12,9 @@
  *   // croppedCanvas is a <canvas> centred on the detected face
  *   // ready to pass into the resize/compress pipeline
  *
- * If no face is found, returns null so the caller can fall back gracefully.
+ * If no face is found, OR if the face is already well-framed (portrait aspect
+ * ratio, proper headroom/chin-room, face the right size), returns null so the
+ * caller can use the original image as-is without unnecessary zoom-in.
  */
 
 /* ── CDN for face-api.js ── */
@@ -86,6 +88,47 @@ export async function autoFaceCrop(imageSource) {
 
   const fh = box.height;   // face box height — all padding is relative to this
   const fw = box.width;
+
+  /*
+   * ── Already well-framed check ──
+   *
+   * If the photo is already a good passport/ID crop — face centred,
+   * proper headroom above, chin-to-bottom clearance, and portrait
+   * aspect ratio — skip cropping to avoid unnecessary zoom-in.
+   *
+   * Criteria (all must pass):
+   *   1. Aspect ratio is portrait-ish (W/H ≤ 0.90 — covers 3:4, 2:3, etc.)
+   *   2. Face width occupies 25–80% of image width
+   *      (25% lower bound catches properly-framed photos with shoulder room;
+   *       80% upper bound catches extreme close-ups that still need re-crop)
+   *   3. Face vertical centre sits in the upper 20–70% of image height
+   *      (relaxed from 30–65% — catches faces slightly higher or lower)
+   *   4. Adequate headroom above face box top  (≥ 8% of image height)
+   *      (relaxed from 15% — some well-framed photos have tighter headroom)
+   *   5. Adequate chin room below face box bottom (≥ 8% of image height)
+   *      (relaxed from 10%)
+   */
+  const aspectRatio      = W / H;
+  const faceWidthRatio   = fw / W;
+  const faceCentreYRatio = (box.y + fh / 2) / H;
+  const headroomRatio    = box.y / H;                      // space above face box top
+  const chinRoomRatio    = (H - (box.y + fh)) / H;        // space below face box bottom
+
+  const isPortrait            = aspectRatio <= 0.90;
+  const faceWellSized         = faceWidthRatio >= 0.25 && faceWidthRatio <= 0.80;
+  const faceCentredVertically = faceCentreYRatio >= 0.20 && faceCentreYRatio <= 0.70;
+  const hasHeadroom           = headroomRatio >= 0.08;
+  const hasChinRoom           = chinRoomRatio >= 0.08;
+
+  if (isPortrait && faceWellSized && faceCentredVertically && hasHeadroom && hasChinRoom) {
+    console.info(
+      `[ai-facecrop] Face already well-framed — skipping crop. ` +
+      `(aspect=${aspectRatio.toFixed(2)}, faceW%=${(faceWidthRatio*100).toFixed(1)}, ` +
+      `faceY%=${(faceCentreYRatio*100).toFixed(1)}, headroom%=${(headroomRatio*100).toFixed(1)}, ` +
+      `chinRoom%=${(chinRoomRatio*100).toFixed(1)})`
+    );
+    return null;   // caller treats null as "use original image as-is"
+  }
 
   /*
    * ── Padding values (tuned for passport/government photos) ──

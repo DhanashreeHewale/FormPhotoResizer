@@ -100,7 +100,7 @@
       <a href="../tools/auto-face-crop.html"     class="nav-link active">Face Auto-Crop</a>
       <a href="../tools/photo-validator.html"    class="nav-link">Validator</a>
       <a href="../maharashtra/mpsc-photo-resizer.html" class="nav-link">Maharashtra</a>
-      <a href="../" class="nav-link">All Tools</a>
+      <a href="../" class="nav-link">Home</a>
     </nav>
     <button class="nav-toggle" id="nav-toggle" aria-label="Open menu">☰</button>
   </div>
@@ -170,9 +170,8 @@
     </div>
     <div class="field">
       <label class="field-label">Format</label>
-      <select id="inp-fmt">
+      <select id="inp-fmt" disabled>
         <option value="jpeg" selected>JPEG</option>
-        <option value="png">PNG</option>
       </select>
     </div>
   </div>
@@ -303,7 +302,7 @@ window.TOOL_CONFIG = {
   examName: 'face',
   presets: [
     { id: 'aadhar',    icon: '🪪', name: 'Aadhar Card',    sizeLabel: '200 × 200 px', kbLabel: 'Max 50 KB',  w: 200, h: 200, maxKB: 50,  format: 'jpeg' },
-    { id: 'pan',       icon: '💳', name: 'PAN Card',        sizeLabel: '213 × 213 px', kbLabel: 'Max 20 KB',  w: 213, h: 213, maxKB: 20,  format: 'jpeg' },
+    { id: 'pan',       icon: '💳', name: 'PAN Card',        sizeLabel: '200 × 230 px', kbLabel: 'Max 20 KB',  w: 200, h: 230, maxKB: 20,  format: 'jpeg' },
     { id: 'passport',  icon: '🛂', name: 'Passport Photo',  sizeLabel: '600 × 600 px', kbLabel: 'Max 500 KB', w: 600, h: 600, maxKB: 500, format: 'jpeg' },
     { id: 'mpsc',      icon: '📋', name: 'MPSC Photo',      sizeLabel: '275 × 354 px', kbLabel: 'Max 50 KB',  w: 275, h: 354, maxKB: 50,  format: 'jpeg' },
     { id: 'ssc',       icon: '📑', name: 'SSC Photo',       sizeLabel: '275 × 354 px', kbLabel: 'Max 50 KB',  w: 275, h: 354, maxKB: 50,  format: 'jpeg' },

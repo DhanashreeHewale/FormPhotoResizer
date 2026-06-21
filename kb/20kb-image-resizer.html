@@ -129,7 +129,7 @@
       <a href="../kb/50kb-image-resizer.html"  class="nav-link">50 KB</a>
       <a href="../kb/100kb-image-resizer.html" class="nav-link">100 KB</a>
       <a href="../maharashtra/mpsc-photo-resizer.html" class="nav-link">Maharashtra</a>
-      <a href="../" class="nav-link">All Tools</a>
+      <a href="../" class="nav-link">Home</a>
     </nav>
     <button class="nav-toggle" id="nav-toggle" aria-label="Open menu">☰</button>
   </div>
@@ -144,7 +144,7 @@
       <span class="kb-target-unit">KB</span>
     </div>
     <div class="kb-target-info">
-      <h2>Resize any photo to under 20 KB</h2>
+      <h1>Resize any photo to under 20 KB</h1>
       <p>Required for PAN Card (NSDL), NDA, RRB NTPC, and many<br>state government portals. Instant, free, nothing uploaded.</p>
     </div>
   </div>
@@ -161,7 +161,7 @@
       <tr><th>Exam / Form</th><th>Dimensions</th><th>Format</th><th>Max Size</th></tr>
     </thead>
     <tbody>
-      <tr><td>PAN Card (NSDL)</td><td class="spec-val">213 × 213 px</td><td>JPEG</td><td class="spec-val">20 KB</td></tr>
+      <tr><td>PAN Card (NSDL)</td><td class="spec-val">200 × 230 px</td><td>JPEG</td><td class="spec-val">20 KB</td></tr>
       <tr><td>NDA / CDS (UPSC)</td><td class="spec-val">175 × 225 px</td><td>JPEG</td><td class="spec-val">20 KB</td></tr>
       <tr><td>RRB NTPC Signature</td><td class="spec-val">140 × 60 px</td><td>JPEG</td><td class="spec-val">20 KB</td></tr>
       <tr><td>MPSC Signature</td><td class="spec-val">140 × 60 px</td><td>JPEG</td><td class="spec-val">20 KB</td></tr>
@@ -170,7 +170,7 @@
   </table>
 
   <div class="info-note tip">
-    💡 <div><strong>Pro tip:</strong> JPEG at 65–75% quality on a 200×200 px image almost always lands under 20 KB. Use the quality slider and watch the KB meter update live after each resize.</div>
+    💡 <div><strong>Pro tip:</strong> A clear, well-lit image with a properly centred subject is more likely to be accepted than one that only meets the size requirements.</div>
   </div>
 
   <!-- Step bar -->
@@ -206,17 +206,16 @@
   <div class="settings-grid">
     <div class="field">
       <label class="field-label">Width (px)</label>
-      <input type="number" id="inp-w" value="213" min="10" max="3000">
+      <input type="number" id="inp-w" value="200" min="10" max="3000">
     </div>
     <div class="field">
       <label class="field-label">Height (px)</label>
-      <input type="number" id="inp-h" value="213" min="10" max="3000">
+      <input type="number" id="inp-h" value="230" min="10" max="3000">
     </div>
     <div class="field">
       <label class="field-label">Format</label>
-      <select id="inp-fmt">
+      <select id="inp-fmt" disabled>
         <option value="jpeg" selected>JPEG</option>
-        <option value="png">PNG</option>
       </select>
     </div>
   </div>
@@ -312,23 +311,23 @@
     </div>
 
     <div class="faq-item">
-      <button class="faq-q-btn">How do I compress a photo to under 20 KB without losing quality? <span class="faq-chevron">⌄</span></button>
-      <div class="faq-answer">The key is combining dimension reduction with JPEG compression. For a 213×213 px image, JPEG quality of 65–75% typically produces a file between 8–18 KB — well within the limit while remaining clear enough for identity verification. Use the quality slider and the KB meter above to find the sweet spot.</div>
+      <button class="faq-q-btn">How do I resize an image to 20 KB online? <span class="faq-chevron">⌄</span></button>
+      <div class="faq-answer">Upload your image and click Resize & Compress. The tool automatically adjusts the image to meet the target file size while maintaining good visual quality. Everything happens directly in your browser, so your image remains private.</div>
     </div>
 
     <div class="faq-item">
       <button class="faq-q-btn">Can I reduce a 2 MB photo to 20 KB? <span class="faq-chevron">⌄</span></button>
-      <div class="faq-answer">Yes. A typical smartphone photo is 3–8 MB. By resizing it to 213×213 px and compressing at 70% JPEG quality, you can bring it down to 10–18 KB — a 99%+ reduction. The tool handles this in under 3 seconds entirely in your browser.</div>
+      <div class="faq-answer">Yes. A typical smartphone photo is 3–8 MB. By resizing it to 200×230 px and compressing at 70% JPEG quality, you can bring it down to 10–18 KB — a 99%+ reduction. The tool handles this in under 3 seconds entirely in your browser.</div>
     </div>
 
     <div class="faq-item">
       <button class="faq-q-btn">Why does PNG not work well for 20 KB targets? <span class="faq-chevron">⌄</span></button>
-      <div class="faq-answer">PNG is a lossless format — it cannot be compressed below a certain size based on pixel content. A 213×213 px PNG will typically be 30–80 KB regardless of settings. Always use JPEG for small KB targets like 20 KB. Government portals also usually mandate JPEG explicitly.</div>
+      <div class="faq-answer">PNG is a lossless format — it cannot be compressed below a certain size based on pixel content. A 200×230 px PNG will typically be 30–80 KB regardless of settings. Always use JPEG for small KB targets like 20 KB. Government portals also usually mandate JPEG explicitly.</div>
     </div>
 
     <div class="faq-item">
-      <button class="faq-q-btn">My photo is still over 20 KB after compression. What should I do? <span class="faq-chevron">⌄</span></button>
-      <div class="faq-answer">Try two things: (1) lower the quality slider to 60–65%, and (2) reduce the pixel dimensions slightly (e.g. from 213×213 to 180×180). The KB meter shows your current output size in real time after each resize. Keep adjusting until the bar turns green.</div>
+      <button class="faq-q-btn">My photo is still larger than 20 KB. What should I do? <span class="faq-chevron">⌄</span></button>
+      <div class="faq-answer">Images with complex backgrounds or very high detail can result in larger file sizes. Try using a properly cropped image with a plain background. The tool automatically optimizes the output to help meet the selected size limit.</div>
     </div>
 
     <div class="faq-item">
@@ -350,7 +349,7 @@
       <a href="../kb/50kb-image-resizer.html">50 KB Resizer</a>
       <a href="../kb/100kb-image-resizer.html">100 KB Resizer</a>
       <a href="../maharashtra/mpsc-photo-resizer.html">MPSC Photo</a>
-      <a href="../">All Tools</a>
+      <a href="../">Home</a>
     </div>
   </div>
   <div class="footer-bottom">
@@ -363,7 +362,7 @@
 window.TOOL_CONFIG = {
   examName: '20kb',
   presets: [
-    { id: 'pan',        icon: '💳', name: 'PAN Card',         sizeLabel: '213 × 213 px', kbLabel: 'Max 20 KB', w: 213, h: 213, maxKB: 20, format: 'jpeg' },
+    { id: 'pan',        icon: '💳', name: 'PAN Card',         sizeLabel: '200 × 230 px', kbLabel: 'Max 20 KB', w: 200, h: 230, maxKB: 20, format: 'jpeg' },
     { id: 'nda',        icon: '🎖️', name: 'NDA / CDS',        sizeLabel: '175 × 225 px', kbLabel: 'Max 20 KB', w: 175, h: 225, maxKB: 20, format: 'jpeg' },
     { id: 'signature',  icon: '✍️', name: 'Signature',         sizeLabel: '140 × 60 px',  kbLabel: 'Max 20 KB', w: 140, h: 60,  maxKB: 20, format: 'jpeg' },
     { id: 'custom',     icon: '✏️', name: 'Custom Size',       sizeLabel: 'Enter below',  kbLabel: 'Max 20 KB', w: 200, h: 200, maxKB: 20, format: 'jpeg' },

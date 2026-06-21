@@ -1,5 +1,5 @@
 /**
- * FormPhotoResize.in — Shared Tool Engine v2
+ * FormPhotoResize.in — Shared Tool Engine v3
  * assets/tool.js
  *
  * Fixes in v2:
@@ -11,6 +11,12 @@
  *  - Star rating widget
  *  - No conflicts with any inline script
  *
+ * Fixes in v3 (Phase 1):
+ *  - Hard max/min dimension clamp (10–3000px) enforced in JS, not just HTML attr
+ *  - Download step in the step-bar now turns green ("done") after the file
+ *    actually downloads, not just when the result is ready
+ *  - Output format locked to JPEG (PNG removed — government portals require JPG)
+ *
  * Each page defines window.TOOL_CONFIG before this script loads:
  *   window.TOOL_CONFIG = {
  *     presets: [{ id, icon, name, sizeLabel, kbLabel, w, h, maxKB, format, filename }],
@@ -21,6 +27,10 @@
 
 (function () {
   'use strict';
+
+  /* ── Limits ── */
+  const MAX_DIM = 3000; /* hard cap on width/height in px, matches HTML max attr */
+  const MIN_DIM = 10;
 
   /* ── State ── */
   let originalFile   = null;
@@ -145,6 +155,12 @@
       elInpQ.addEventListener('input', () => { elQDisplay.textContent = elInpQ.value + '%'; });
     }
 
+    /* ── Clamp width/height to MIN_DIM–MAX_DIM (blur = once user finishes typing) ── */
+    [elInpW, elInpH].forEach(inp => {
+      if (!inp) return;
+      inp.addEventListener('blur', () => { inp.value = clampDim(inp.value); });
+    });
+
     /* ── Upload zone ── */
     if (elUploadZone) {
       /* Inject AI auto-face-crop toggle (shared across all resizer pages) */
@@ -208,20 +224,77 @@
     /* ── Star rating ── */
     const stars = document.querySelectorAll('.star-btn');
     const ratingThanks = document.getElementById('rating-thanks');
+    let ratingLocked = false;
+
+    /* Inject star animation keyframes once */
+    if (!document.getElementById('star-burst-style')) {
+      const ss = document.createElement('style');
+      ss.id = 'star-burst-style';
+      ss.textContent = `
+        .star-btn        { opacity: 0.3; transition: opacity 0.1s, transform 0.15s; }
+        .star-btn.lit    { opacity: 1; }
+        .star-btn:hover  { transform: scale(1.2); }
+        .star-btn.burst  { transform: scale(1.2); }
+        #rating-thanks   { transition: opacity 0.3s ease, transform 0.3s ease; }
+        #rating-thanks.hidden-pre { opacity: 0; transform: translateY(6px); }
+      `;
+      document.head.appendChild(ss);
+    }
+
     if (stars.length) {
+      /* Pre-hide thanks so first reveal can animate in */
+      if (ratingThanks) ratingThanks.classList.add('hidden-pre');
+
       stars.forEach(star => {
         star.addEventListener('mouseover', () => {
+          if (ratingLocked) return;
           const v = +star.dataset.v;
           stars.forEach(s => s.classList.toggle('lit', +s.dataset.v <= v));
         });
         star.addEventListener('mouseout', () => {
-          if (ratingThanks && ratingThanks.style.display !== 'block')
-            stars.forEach(s => s.classList.remove('lit'));
+          if (ratingLocked) return;
+          stars.forEach(s => s.classList.remove('lit'));
         });
         star.addEventListener('click', () => {
+          if (ratingLocked) return;
+          ratingLocked = true;
+
           const v = +star.dataset.v;
-          stars.forEach(s => s.classList.toggle('lit', +s.dataset.v <= v));
-          if (ratingThanks) ratingThanks.style.display = 'block';
+
+          /* Light up stars up to the tapped one, burst each with staggered delay */
+          stars.forEach(s => {
+            const sv = +s.dataset.v;
+            const isLit = sv <= v;
+            s.classList.toggle('lit', isLit);
+            s.style.pointerEvents = 'none';   /* lock all stars */
+
+            if (isLit) {
+              /* Stagger: each filled star pops 40ms after the previous */
+              const delay = (sv - 1) * 40;
+              setTimeout(() => {
+                s.classList.remove('burst');
+                void s.offsetWidth;            /* force reflow to re-trigger animation */
+                s.classList.add('burst');
+              }, delay);
+            }
+          });
+
+          /* Show thanks message with slide-in after the last star bursts */
+          const revealDelay = (v - 1) * 40 + 280;
+          setTimeout(() => {
+            if (ratingThanks) {
+              ratingThanks.style.display = 'block';
+              /* Tiny rAF so display:block is painted before we remove hidden-pre */
+              requestAnimationFrame(() => {
+                requestAnimationFrame(() => ratingThanks.classList.remove('hidden-pre'));
+              });
+              /* Update thanks text to reflect the actual rating given */
+              const messages = ['', 'Thanks for the feedback!', 'Thanks for the feedback!',
+                                    'Glad it helped! 😊', 'Great, thanks! 😊', 'Awesome, thank you! 🎉'];
+              const msg = ratingThanks.querySelector('p') || ratingThanks;
+              if (msg) msg.textContent = messages[v] || 'Thank you!';
+            }
+          }, revealDelay);
         });
       });
     }
@@ -258,14 +331,34 @@
 
     /* Hide AI face-crop toggle for signature presets — not relevant */
     const faceWrap = document.querySelector('.auto-face-wrap');
+    // if (faceWrap) {
+    //   const isSignature = preset.id && preset.id.toLowerCase().includes('sign');
+    //   faceWrap.style.display = isSignature ? 'none' : '';
+
+    //   const isThumb = preset.id && preset.id.toLowerCase().includes('thumb');
+    //   faceWrap.style.display = isThumb ? 'none' : '';
+
+    //   /* Also uncheck + disable so it doesn't run on signature uploads */
+    //   const toggle = document.getElementById('auto-face-toggle');
+    //   if (toggle) {
+    //     toggle.checked  = !isSignature;
+    //     toggle.disabled =  isSignature;
+    //   }
+    // }
     if (faceWrap) {
-      const isSignature = preset.id && preset.id.toLowerCase().includes('sign');
-      faceWrap.style.display = isSignature ? 'none' : '';
-      /* Also uncheck + disable so it doesn't run on signature uploads */
+      const presetId = (preset.id || '').toLowerCase();
+    
+      const isSignature = presetId.includes('sign');
+      const isThumb = presetId.includes('thumb');
+    
+      const hideFaceCrop = isSignature || isThumb;
+    
+      faceWrap.style.display = hideFaceCrop ? 'none' : '';
+    
       const toggle = document.getElementById('auto-face-toggle');
       if (toggle) {
-        toggle.checked  = !isSignature;
-        toggle.disabled =  isSignature;
+        toggle.checked = !hideFaceCrop;
+        toggle.disabled = hideFaceCrop;
       }
     }
   }
@@ -279,6 +372,14 @@
       const dataURL = e.target.result;
 
       if (isAutoFaceEnabled()) {
+        /* Show the uploaded photo immediately, with a clearly visible
+           scanning overlay on top of it — so the user sees right away
+           that the upload worked and that something is happening,
+           instead of staring at the empty drop-zone wondering why
+           their photo isn't showing. */
+        renderLivePreview(dataURL, file);
+        setFaceScanOverlay(true, '🔎 Detecting face…');
+
         const img = new Image();
         img.onload = () => tryFaceCrop(img, file, dataURL);
         img.src = dataURL;
@@ -303,8 +404,29 @@
     el.style.display = msg ? 'flex' : 'none';
   }
 
+  /* ── Prominent scanning overlay shown on top of the live preview while
+     face detection is running (separate from the small text strip below
+     the toggle, which is easy to miss) ── */
+  function setFaceScanOverlay(show, label) {
+    if (!elUploadZone) return;
+    let overlay = elUploadZone.querySelector('.face-scan-overlay');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.className = 'face-scan-overlay';
+      overlay.innerHTML = `
+        <div class="face-scan-line"></div>
+        <div class="face-scan-label" id="face-scan-label"></div>
+        <div class="face-scan-bar-track"><div class="face-scan-bar-fill"></div></div>`;
+      elUploadZone.appendChild(overlay);
+    }
+    const labelEl = overlay.querySelector('#face-scan-label');
+    if (labelEl) labelEl.textContent = label || 'Detecting face…';
+    overlay.classList.toggle('show', !!show);
+  }
+
   function tryFaceCrop(img, file, dataURL) {
     setFaceStatus('🔎 Detecting face… (first time may take a few seconds)', 'busy');
+    setFaceScanOverlay(true, '🔎 Detecting face…');
     const toolScript = document.querySelector('script[src*="tool.js"]');
     const modUrl = toolScript ? new URL('ai-facecrop.js', toolScript.src) : './ai-facecrop.js';
     import(modUrl)
@@ -330,6 +452,36 @@
       });
   }
 
+  /* ── Render (or update) the live photo preview inside the upload zone.
+     Shared by the immediate "just uploaded" preview and the final
+     post-face-crop preview, so the photo never disappears in between. ── */
+  function renderLivePreview(dataURL, file) {
+    if (!elUploadZone) return;
+    elUploadZone.classList.add('loaded');
+
+    let previewImg = elUploadZone.querySelector('.upload-live-preview');
+    if (!previewImg) {
+      previewImg = document.createElement('img');
+      previewImg.className = 'upload-live-preview';
+      previewImg.alt = 'Uploaded photo preview';
+      elUploadZone.insertBefore(previewImg, elUploadZone.firstChild);
+    }
+    previewImg.src = dataURL;
+
+    /* Update text elements */
+    const icon  = elUploadZone.querySelector('.upload-icon');
+    const title = elUploadZone.querySelector('.upload-title');
+    const sub   = elUploadZone.querySelector('.upload-sub');
+    const hint  = elUploadZone.querySelector('.upload-hint');
+    if (icon)  icon.style.display  = 'none';
+    if (title) title.style.display = 'none';
+    if (hint)  hint.style.display  = 'none';
+    if (sub) {
+      const kb = fmtKB(file.size);
+      sub.innerHTML = `<span class="upload-change-hint">📁 <strong>${file.name}</strong> · ${kb} · Click to change</span>`;
+    }
+  }
+
   function finishLoad(file, dataURL) {
     originalFile = file;
     if (elOrigPreview) elOrigPreview.src = dataURL;
@@ -337,29 +489,9 @@
     if (elOrigLabel) elOrigLabel.innerHTML = `Original &nbsp;<span class=\"size-tag\">${kb}</span>`;
     if (elStatOrig)  elStatOrig.textContent = kb;
 
-    if (elUploadZone) {
-      elUploadZone.classList.add('loaded');
+    renderLivePreview(dataURL, file);
+    setFaceScanOverlay(false);
 
-      /* ── Live photo preview inside upload zone ── */
-      let previewImg = elUploadZone.querySelector('.upload-live-preview');
-      if (!previewImg) {
-        previewImg = document.createElement('img');
-        previewImg.className = 'upload-live-preview';
-        previewImg.alt = 'Uploaded photo preview';
-        elUploadZone.insertBefore(previewImg, elUploadZone.firstChild);
-      }
-      previewImg.src = dataURL;
-
-      /* Update text elements */
-      const icon  = elUploadZone.querySelector('.upload-icon');
-      const title = elUploadZone.querySelector('.upload-title');
-      const sub   = elUploadZone.querySelector('.upload-sub');
-      const hint  = elUploadZone.querySelector('.upload-hint');
-      if (icon)  icon.style.display  = 'none';
-      if (title) title.style.display = 'none';
-      if (sub)   sub.innerHTML = `<span class="upload-change-hint">📁 <strong>${file.name}</strong> · ${kb} · Click to change</span>`;
-      if (hint)  hint.style.display  = 'none';
-    }
     if (elResultCard) elResultCard.classList.remove('show');
     setStep(2);
   }
@@ -382,21 +514,62 @@
     }
   }
 
-  /* ── Binary-search KB compression ── */
+  /* ── Binary-search KB compression ── v5
+   *
+   * Three rules:
+   *
+   * RULE 1 — Already under limit → dimension-resize only, zero compression.
+   *   If the canvas at near-lossless quality (0.97) is already <= targetKB,
+   *   return it as-is. The user asked for a size limit, not forced compression.
+   *   e.g. 35 KB original -> 50 KB limit -> just resize dimensions, keep quality.
+   *
+   * RULE 2 — Needs compression -> aim for 90-95% of limit, NOT under it.
+   *   Binary-search upward from the buffered floor so the result lands as
+   *   close to the limit as possible (18-19 KB for 20 KB, 45-48 KB for 50 KB,
+   *   90-95 KB for 100 KB). Never compress more than necessary.
+   *
+   * RULE 3 — Truly oversized even at lowest quality -> best effort.
+   */
   function compressToTargetKB(canvas, mime, targetKB) {
     if (mime === 'image/png') return canvas.toDataURL('image/png');
-    const targetBytes = targetKB * 1024;
-    let lo = 0.05, hi = 1.0, bestURL = null;
-    for (let i = 0; i < 14; i++) {
-      const mid = (lo + hi) / 2;
-      const url = canvas.toDataURL(mime, mid);
-      const bytes = b64Bytes(url);
-      if (bytes <= targetBytes) { bestURL = url; lo = mid; }
-      else hi = mid;
-      if (hi - lo < 0.005) break;
+
+    const hardLimitBytes = targetKB * 1024;
+    const floorBytes     = Math.max(1, targetKB * 0.90) * 1024; // aim for >=90% of limit
+
+    /* RULE 1: Near-lossless encode fits under hard limit -> ship it, no compression */
+    const NEAR_LOSSLESS = 0.97;
+    const nlURL   = canvas.toDataURL(mime, NEAR_LOSSLESS);
+    const nlBytes = b64Bytes(nlURL);
+    if (nlBytes <= hardLimitBytes) {
+      console.info(`[compress] Already under ${targetKB} KB at q=0.97 (${(nlBytes/1024).toFixed(1)} KB) — skipping compression.`);
+      return nlURL;
     }
-    /* If even quality=1.0 is under target, just return full quality */
+
+    /* RULE 2: Must compress — binary-search to land between 90-100% of limit.
+       Find highest quality whose output is <= hardLimitBytes, prefer closest to floorBytes. */
+    let lo = 0.05, hi = NEAR_LOSSLESS;
+    let bestURL   = null;
+    let bestBytes = 0;
+
+    for (let i = 0; i < 16; i++) {
+      const mid   = (lo + hi) / 2;
+      const url   = canvas.toDataURL(mime, mid);
+      const bytes = b64Bytes(url);
+
+      if (bytes <= hardLimitBytes) {
+        if (bytes > bestBytes) { bestURL = url; bestBytes = bytes; }
+        lo = mid;
+      } else {
+        hi = mid;
+      }
+
+      if (hi - lo < 0.004) break;
+    }
+
+    /* RULE 3: Nothing fit — return the smallest we found */
     if (!bestURL) bestURL = canvas.toDataURL(mime, lo);
+
+    console.info(`[compress] Compressed to ${(b64Bytes(bestURL)/1024).toFixed(1)} KB (limit: ${targetKB} KB)`);
     return bestURL;
   }
 
@@ -404,8 +577,10 @@
   function processImage() {
     if (!originalFile) return;
 
-    const w   = parseInt(elInpW  ? elInpW.value  : 200) || 200;
-    const h   = parseInt(elInpH  ? elInpH.value  : 200) || 200;
+    const w   = clampDim(elInpW ? elInpW.value : 200);
+    const h   = clampDim(elInpH ? elInpH.value : 200);
+    if (elInpW) elInpW.value = w;
+    if (elInpH) elInpH.value = h;
     const fmt = elInpFmt ? elInpFmt.value : 'jpeg';
     const manualQ = elInpQ ? parseInt(elInpQ.value) / 100 : 0.82;
 
@@ -542,6 +717,23 @@
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+
+    /* Mark step 3 (Download) as done/green now that the file has actually been saved */
+    if (elStep3) {
+      elStep3.classList.remove('active');
+      elStep3.classList.add('done');
+    }
+    if (elBtnDownload) {
+      const origHTML = elBtnDownload.dataset.origHtml || elBtnDownload.innerHTML;
+      elBtnDownload.dataset.origHtml = origHTML;
+      elBtnDownload.classList.add('downloaded');
+      elBtnDownload.innerHTML = '✅ Downloaded';
+      clearTimeout(elBtnDownload._resetTimer);
+      elBtnDownload._resetTimer = setTimeout(() => {
+        elBtnDownload.classList.remove('downloaded');
+        elBtnDownload.innerHTML = origHTML;
+      }, 2500);
+    }
   }
 
   /* ── Step bar ── */
@@ -555,6 +747,14 @@
   }
 
   /* ── Helpers ── */
+  function clampDim(val) {
+    let n = parseInt(val, 10);
+    if (isNaN(n)) n = 200;
+    if (n < MIN_DIM) n = MIN_DIM;
+    if (n > MAX_DIM) n = MAX_DIM;
+    return n;
+  }
+
   function b64Bytes(dataURL) {
     try { return Math.round(atob(dataURL.split(',')[1]).length); }
     catch { return 0; }

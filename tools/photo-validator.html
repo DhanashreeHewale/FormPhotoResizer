@@ -188,7 +188,7 @@
       <a href="../tools/heic-to-jpg.html"        class="nav-link">HEIC→JPG</a>
       <a href="../tools/photo-validator.html"    class="nav-link active">Validator</a>
       <a href="../maharashtra/mpsc-photo-resizer.html" class="nav-link">Maharashtra</a>
-      <a href="../" class="nav-link">All Tools</a>
+      <a href="../" class="nav-link">Home</a>
     </nav>
     <button class="nav-toggle" id="nav-toggle" aria-label="Open menu">☰</button>
   </div>
@@ -243,14 +243,6 @@
     </svg>
     Validate Photo
   </button>
-
-  <!-- Photo preview -->
-  <div class="validator-preview" id="validator-preview">
-    <img id="preview-img" src="" alt="Uploaded photo">
-  </div>
-
-  <!-- Photo metadata pills -->
-  <div class="photo-meta" id="photo-meta"></div>
 
   <!-- Summary banner -->
   <div class="summary-banner" id="summary-banner">
@@ -345,11 +337,11 @@
       <a href="../tools/heic-to-jpg.html">HEIC → JPG</a>
       <a href="../tools/photo-validator.html">Photo Validator</a>
       <a href="../maharashtra/mpsc-photo-resizer.html">MPSC Photo</a>
-      <a href="../">All Tools</a>
+      <a href="../">Home</a>
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2025 FormPhotoResizer.in — All processing is local. Zero data stored.</span>
+    <span>© 2026 FormPhotoResizer.in — All processing is local. Zero data stored.</span>
     <span>🔒 Privacy First</span>
   </div>
 </footer>
@@ -386,14 +378,14 @@
   /* ── Exam specs database ── */
   const EXAMS = [
     { id: 'mpsc',    icon: '📋', name: 'MPSC Photo',       w: 275, h: 354, maxKB: 50,  formats: ['jpeg'], aspect: 0.78, fixUrl: '../maharashtra/mpsc-photo-resizer.html' },
-    { id: 'mhtcet',  icon: '🔬', name: 'MHT-CET Photo',    w: 413, h: 531, maxKB: 100, formats: ['jpeg'], aspect: 0.78, fixUrl: '../maharashtra/mht-cet-photo-resizer.html' },
-    { id: 'police',  icon: '👮', name: 'MH Police',         w: 200, h: 230, maxKB: 50,  formats: ['jpeg'], aspect: 0.87, fixUrl: '../maharashtra/maharashtra-police-photo-resizer.html' },
-    { id: 'pan',     icon: '💳', name: 'PAN Card',          w: 213, h: 213, maxKB: 20,  formats: ['jpeg'], aspect: 1.00, fixUrl: '../kb/20kb-image-resizer.html' },
+    { id: 'mhtcet',  icon: '🔬', name: 'MHT-CET Photo',    w: 275, h: 354, maxKB: 50, formats: ['jpeg'], aspect: 0.78, fixUrl: '../maharashtra/mht-cet-photo-resizer.html' },
+    { id: 'police',  icon: '👮', name: 'MH Police',         w: 160, h: 200, maxKB: 20,  formats: ['jpeg'], aspect: 0.87, fixUrl: '../maharashtra/maharashtra-police-photo-resizer.html' },
+    { id: 'pan',     icon: '💳', name: 'PAN Card',          w: 200, h: 230, maxKB: 20,  formats: ['jpeg'], aspect: 1.00, fixUrl: '../kb/20kb-image-resizer.html' },
     { id: 'aadhar',  icon: '🪪', name: 'Aadhar Card',       w: 200, h: 200, maxKB: 50,  formats: ['jpeg'], aspect: 1.00, fixUrl: '../kb/50kb-image-resizer.html' },
-    { id: 'ssc',     icon: '📑', name: 'SSC Photo',         w: 125, h: 165, maxKB: 50,  formats: ['jpeg'], aspect: 0.76, fixUrl: '/exams/ssc-photo-resizer.html' },
+    { id: 'ssc',     icon: '📑', name: 'SSC Photo',         w: 275, h: 354, maxKB: 50,  formats: ['jpeg'], aspect: 0.76, fixUrl: '/exams/ssc-photo-resizer.html' },
     { id: 'ibps',    icon: '🏦', name: 'IBPS Photo',        w: 200, h: 230, maxKB: 50,  formats: ['jpeg'], aspect: 0.87, fixUrl: '/exams/ibps-photo-resizer.html' },
-    { id: 'upsc',    icon: '🏛️', name: 'UPSC Photo',        w: 300, h: 400, maxKB: 300, formats: ['jpeg'], aspect: 0.75, fixUrl: '/exams/upsc-photo-resizer.html' },
-    { id: 'mpsc-sig',icon: '✍️', name: 'MPSC Signature',   w: 140, h: 60,  maxKB: 20,  formats: ['jpeg'], aspect: 2.33, fixUrl: '../maharashtra/mpsc-signature-resizer.html' },
+    { id: 'upsc',    icon: '🏛️', name: 'UPSC Photo',        w: 350, h: 350, maxKB: 100, formats: ['jpeg'], aspect: 0.75, fixUrl: '/exams/upsc-photo-resizer.html' },
+    { id: 'mpsc-sig',icon: '✍️', name: 'MPSC Signature',   w: 150, h: 60,  maxKB: 20,  formats: ['jpeg'], aspect: 2.33, fixUrl: '../maharashtra/mpsc-signature-resizer.html' },
     { id: 'custom',  icon: '✏️', name: 'Custom',            w: null, h: null, maxKB: null, formats: ['jpeg', 'png'], aspect: null, fixUrl: '../index.html' },
   ];
 
@@ -434,23 +426,30 @@
     reader.onload = e => {
       uploadedImg = new Image();
       uploadedImg.onload = () => {
-        /* Preview */
-        const prevEl = document.getElementById('validator-preview');
-        prevEl.classList.add('show');
-        document.getElementById('preview-img').src = e.target.result;
-
-        /* Meta pills */
-        const metaEl = document.getElementById('photo-meta');
-        metaEl.classList.add('show');
-        metaEl.innerHTML = `
-          <span class="meta-pill">📐 <strong>${uploadedImg.naturalWidth} × ${uploadedImg.naturalHeight} px</strong></span>
-          <span class="meta-pill">💾 <strong>${fmtKB(file.size)}</strong></span>
-          <span class="meta-pill">🖼️ <strong>${file.type || 'unknown'}</strong></span>
-          <span class="meta-pill">📄 <strong>${file.name}</strong></span>`;
-
+        /* Show preview inside upload zone */
         uploadZone.classList.add('loaded');
-        document.getElementById('upload-icon').textContent  = '✅';
-        document.getElementById('upload-title').textContent = file.name;
+        let previewImg = uploadZone.querySelector('.upload-live-preview');
+        if (!previewImg) {
+          previewImg = document.createElement('img');
+          previewImg.className = 'upload-live-preview';
+          previewImg.alt = 'Uploaded photo preview';
+          previewImg.style.cssText = 'max-height:260px;max-width:100%;object-fit:contain;display:block;margin:0 auto;border-radius:6px;';
+          uploadZone.insertBefore(previewImg, uploadZone.firstChild);
+        }
+        previewImg.src = e.target.result;
+
+        /* Hide upload placeholder text */
+        const icon  = uploadZone.querySelector('.upload-icon');
+        const title = uploadZone.querySelector('.upload-title');
+        const hint  = uploadZone.querySelector('.upload-hint');
+        if (icon)  icon.style.display  = 'none';
+        if (title) title.style.display = 'none';
+        if (hint)  hint.style.display  = 'none';
+
+        /* Update sub text with file info + meta pills inline */
+        const sub = uploadZone.querySelector('.upload-sub');
+        if (sub) sub.innerHTML = `📁 <strong>${file.name}</strong> &nbsp;·&nbsp; ${fmtKB(file.size)} &nbsp;·&nbsp; ${uploadedImg.naturalWidth}×${uploadedImg.naturalHeight}px &nbsp;·&nbsp; <span style="color:var(--saffron);cursor:pointer">Click to change</span>`;
+
         btnValidate.disabled = false;
         setStep(2);
       };
@@ -461,8 +460,8 @@
 
   /* ── Validate button ── */
   btnValidate.addEventListener('click', () => {
-    runValidation();
     setStep(3);
+    runValidation();
   });
 
   function runValidation() {
@@ -615,6 +614,13 @@
 
     document.getElementById('share-row').style.display  = 'flex';
     document.getElementById('rating-box').style.display = 'block';
+
+    /* Turn Step 3 "View Report" green once validation is complete */
+    const step3 = document.getElementById('step-3');
+    if (step3) {
+      step3.classList.remove('active');
+      step3.classList.add('done');
+    }
   }
 
   /* ── Background colour check ── */

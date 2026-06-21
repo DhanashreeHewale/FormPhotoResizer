@@ -230,7 +230,7 @@
       <a href="../tools/heic-to-jpg.html"        class="nav-link active">HEIC→JPG</a>
       <a href="../tools/photo-validator.html"    class="nav-link">Validator</a>
       <a href="../maharashtra/mpsc-photo-resizer.html" class="nav-link">Maharashtra</a>
-      <a href="../" class="nav-link">All Tools</a>
+      <a href="../" class="nav-link">Home</a>
     </nav>
     <button class="nav-toggle" id="nav-toggle" aria-label="Open menu">☰</button>
   </div>
@@ -249,23 +249,18 @@
     100% private — conversion runs in your browser. No photos are uploaded to any server.
   </div>
 
-  <!-- How it works -->
-  <div class="section-label">How it works</div>
-  <div class="how-steps">
-    <div class="how-step">
-      <div class="how-step-num">1</div>
-      <div class="how-step-title">Upload HEIC files</div>
-      <div class="how-step-sub">Select one or multiple .heic photos from your iPhone</div>
+  <div class="step-bar" style="margin-bottom:20px;">
+    <div class="step-item active" id="step-1">
+      <div class="step-num">1</div>
+      <div class="step-label">Upload Files<span class="step-sublabel">HEIC, JPG, PNG supported</span></div>
     </div>
-    <div class="how-step">
-      <div class="how-step-num">2</div>
-      <div class="how-step-title">Auto converts</div>
-      <div class="how-step-sub">Each file converts to JPG instantly in your browser</div>
+    <div class="step-item" id="step-2">
+      <div class="step-num">2</div>
+      <div class="step-label">Convert<span class="step-sublabel">Converts instantly in browser</span></div>
     </div>
-    <div class="how-step">
-      <div class="how-step-num">3</div>
-      <div class="how-step-title">Download &amp; resize</div>
-      <div class="how-step-sub">Download JPGs, then resize for your exam</div>
+    <div class="step-item" id="step-3">
+      <div class="step-num">3</div>
+      <div class="step-label">Download<span class="step-sublabel">Save JPG, then resize for exam</span></div>
     </div>
   </div>
 
@@ -286,6 +281,9 @@
       <option value="image/png">PNG</option>
       <option value="image/webp">WebP</option>
     </select>
+    <span id="png-size-note" style="display:none;font-size:11px;color:var(--muted);margin-left:4px;">
+      PNG is lossless — output will be large. Use JPG for government forms.
+    </span>
     <div class="quality-inline">
       <label>Quality:</label>
       <input type="range" id="out-quality" min="50" max="100" value="90">
@@ -349,7 +347,7 @@
 
 
   <!-- Resize after conversion strip -->
-  <div style="margin:0 0 28px;padding:14px 16px;background:#FEF3E2;border:1px solid #FBCF8A;border-radius:10px;">
+  <!-- <div style="margin:0 0 28px;padding:14px 16px;background:#FEF3E2;border:1px solid #FBCF8A;border-radius:10px;">
     <div style="font-size:12px;font-weight:700;color:#E07B1A;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">📐 Now resize for your exam portal</div>
     <div style="display:flex;flex-wrap:wrap;gap:8px;">
       <a href="../maharashtra/mpsc-photo-resizer.html" style="padding:6px 14px;background:white;border:1px solid #E2E7F0;border-radius:6px;font-size:12px;font-weight:600;color:#111827;text-decoration:none;">📋 MPSC Photo</a>
@@ -358,7 +356,7 @@
       <a href="../kb/20kb-image-resizer.html" style="padding:6px 14px;background:white;border:1px solid #E2E7F0;border-radius:6px;font-size:12px;font-weight:600;color:#111827;text-decoration:none;">🗜️ 20 KB Resizer</a>
       <a href="photo-validator.html" style="padding:6px 14px;background:white;border:1px solid #E2E7F0;border-radius:6px;font-size:12px;font-weight:600;color:#111827;text-decoration:none;">✅ Photo Validator</a>
     </div>
-  </div>
+  </div> -->
 
   <!-- FAQ -->
   <div class="faq-section">
@@ -403,11 +401,11 @@
       <a href="../tools/heic-to-jpg.html">HEIC → JPG</a>
       <a href="../tools/photo-validator.html">Photo Validator</a>
       <a href="../maharashtra/mpsc-photo-resizer.html">MPSC Photo</a>
-      <a href="../">All Tools</a>
+      <a href="../">Home</a>
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2025 FormPhotoResizer.in — All processing is local. Zero data stored.</span>
+    <span>© 2026 FormPhotoResizer.in — All processing is local. Zero data stored.</span>
     <span>🔒 Privacy First</span>
   </div>
 </footer>
@@ -441,6 +439,36 @@
   document.getElementById('out-quality').addEventListener('input', e => {
     document.getElementById('quality-display').textContent = e.target.value + '%';
   });
+
+  function setStep(n) {
+    [1, 2, 3].forEach(i => {
+      const el = document.getElementById('step-' + i);
+      if (!el) return;
+      el.classList.remove('active', 'done');
+      if (i < n) el.classList.add('done');
+      if (i === n) el.classList.add('active');
+    });
+  }
+  setStep(1);
+
+  /* Wire step transitions */
+  const _fileInput = document.getElementById('file-input');
+  if (_fileInput) _fileInput.addEventListener('change', () => { if (_fileInput.files.length) setStep(2); });
+  const _uploadZone = document.getElementById('upload-zone');
+  if (_uploadZone) _uploadZone.addEventListener('drop', () => setTimeout(() => setStep(2), 100));
+
+  /* Hide quality slider for PNG (lossless — quality param is ignored by browser) */
+  const outFormatEl   = document.getElementById('out-format');
+  const qualityWrapEl = document.querySelector('.quality-inline');
+  const pngNoteEl     = document.getElementById('png-size-note');
+
+  function onFormatChange() {
+    const isPng = outFormatEl.value === 'image/png';
+    qualityWrapEl.style.display = isPng ? 'none' : 'flex';
+    if (pngNoteEl) pngNoteEl.style.display = isPng ? 'inline' : 'none';
+  }
+  outFormatEl.addEventListener('change', onFormatChange);
+  onFormatChange(); /* run once on load */
 </script>
 
 <!-- HEIC conversion engine using heic2any -->
@@ -506,10 +534,74 @@
       }
     });
 
-    /* Update zone UI */
+    /* Update zone UI — show first file preview inside the upload zone */
     uploadZone.classList.add('loaded');
-    uploadZone.querySelector('.upload-title').textContent = files.length + ' file(s) selected';
-    uploadZone.querySelector('.upload-sub').innerHTML = `<strong>${files.length} file${files.length > 1 ? 's' : ''}</strong> · Click to change`;
+
+    /* Hide placeholder elements */
+    const zIcon  = uploadZone.querySelector('.upload-icon');
+    const zTitle = uploadZone.querySelector('.upload-title');
+    const zHint  = uploadZone.querySelector('.upload-hint');
+    if (zIcon)  zIcon.style.display  = 'none';
+    if (zTitle) zTitle.style.display = 'none';
+    if (zHint)  zHint.style.display  = 'none';
+
+    /* Show preview of first file (skip HEIC — browser can't render it) */
+    const firstFile = files[0];
+    const isHeic = /\.(heic|heif)$/i.test(firstFile.name);
+    let previewImg = uploadZone.querySelector('.upload-live-preview');
+    if (!previewImg) {
+      previewImg = document.createElement('img');
+      previewImg.className = 'upload-live-preview';
+      previewImg.alt = 'Preview';
+      previewImg.style.cssText = 'max-height:240px;max-width:100%;object-fit:contain;display:block;margin:0 auto 8px;border-radius:6px;';
+      uploadZone.insertBefore(previewImg, uploadZone.firstChild);
+    }
+    if (!isHeic) {
+      previewImg.src = URL.createObjectURL(firstFile);
+      previewImg.style.display = 'block';
+    } else {
+      /* HEIC: browser can't render it natively — show a styled info card.
+         The actual preview will appear in the file list after conversion. */
+      previewImg.style.display = 'none';
+      let heicPlaceholder = uploadZone.querySelector('.heic-placeholder');
+      if (!heicPlaceholder) {
+        heicPlaceholder = document.createElement('div');
+        heicPlaceholder.className = 'heic-placeholder';
+        heicPlaceholder.style.cssText = [
+          'display:flex', 'flex-direction:column', 'align-items:center',
+          'justify-content:center', 'gap:8px', 'padding:32px 20px',
+          'color:var(--muted)', 'text-align:center'
+        ].join(';');
+        uploadZone.insertBefore(heicPlaceholder, uploadZone.firstChild);
+      }
+      heicPlaceholder.innerHTML = `
+        <div style="
+          width:120px;border-radius:10px;overflow:hidden;
+          box-shadow:0 2px 12px rgba(0,0,0,0.18);background:#fff;
+          display:flex;flex-direction:column;align-items:stretch;
+        ">
+          <!-- HEIC label strip -->
+          <div style="
+            background:#2563EB;color:#fff;font-size:20px;font-weight:900;
+            letter-spacing:2px;text-align:center;padding:10px 0 8px;
+          ">HEIC</div>
+          <!-- Image icon area -->
+          <div style="
+            background:#EFF6FF;padding:14px 0 12px;
+            display:flex;align-items:center;justify-content:center;
+          ">
+            <svg width="52" height="44" viewBox="0 0 52 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="52" height="44" rx="4" fill="#BFDBFE"/>
+              <path d="M6 34L16 20L23 28L30 18L46 34H6Z" fill="#2563EB" opacity="0.7"/>
+              <circle cx="38" cy="12" r="5" fill="#2563EB" opacity="0.5"/>
+            </svg>
+          </div>
+        </div>
+        <div style="font-size:11px;margin-top:8px;color:var(--muted);">Preview after conversion</div>`;
+    }
+
+    const sub = uploadZone.querySelector('.upload-sub');
+    if (sub) sub.innerHTML = `<strong>${files.length} file${files.length > 1 ? 's' : ''} selected</strong> &nbsp;·&nbsp; <span style="color:var(--saffron);cursor:pointer">Click to change</span>`;
   }
 
   /* Convert */
@@ -536,9 +628,13 @@
       try {
         let blob;
         if (/\.(heic|heif)$/i.test(f.name) || f.type === 'image/heic' || f.type === 'image/heif') {
-          /* Use heic2any for HEIC files */
-          blob = await heic2any({ blob: f, toType: fmt, quality });
-          if (Array.isArray(blob)) blob = blob[0]; // heic2any sometimes returns array
+          /* Use heic2any for HEIC→JPG/PNG conversion.
+             NOTE: heic2any ignores the quality param and returns an uncompressed blob
+             (this is a known library limitation). We pipe the result through canvas
+             recompression at the selected quality to get proper file sizes. */
+          let rawBlob = await heic2any({ blob: f, toType: fmt });
+          if (Array.isArray(rawBlob)) rawBlob = rawBlob[0];
+          blob = await recompressImage(rawBlob, fmt, quality);
         } else {
           /* For regular images, just re-compress via canvas */
           blob = await recompressImage(f, fmt, quality);
@@ -548,14 +644,30 @@
         const outName  = baseName + '.' + ext;
         convertedBlobs.push({ name: outName, blob });
 
-        /* Thumb update */
+        /* Thumb update in file list */
         const url = URL.createObjectURL(blob);
         thumb.innerHTML = `<img src="${url}" alt="">`;
+
+        /* Also update the upload zone preview with first converted result */
+        if (i === 0) {
+          const zonePreview = uploadZone.querySelector('.upload-live-preview');
+          const heicCard    = uploadZone.querySelector('.heic-placeholder');
+          if (heicCard)    heicCard.style.display = 'none';
+          if (zonePreview) {
+            zonePreview.src   = url;
+            zonePreview.style.display = 'block';
+          }
+        }
 
         status.className   = 'file-status done';
         status.textContent = '✅ Done · ' + fmtKB(blob.size);
         dlBtn.classList.add('show');
-        dlBtn.onclick = () => downloadBlob(blob, outName);
+        dlBtn.onclick = () => {
+          downloadBlob(blob, outName);
+          /* Mark step 3 done (green) on actual download */
+          const s3 = document.getElementById('step-3');
+          if (s3) { s3.classList.remove('active'); s3.classList.add('done'); }
+        };
 
       } catch (err) {
         status.className   = 'file-status error';
@@ -570,6 +682,7 @@
 
     btnConvert.innerHTML = '✅ Convert Again';
     btnConvert.disabled  = false;
+    setStep(3);  /* Conversion done — step 2 green, step 3 orange */
 
     if (convertedBlobs.filter(Boolean).length > 1) btnBatchDl.classList.add('show');
     shareRow.style.display  = 'flex';
@@ -582,6 +695,9 @@
     convertedBlobs.forEach(item => { if (item) zip.file(item.name, item.blob); });
     const zipBlob = await zip.generateAsync({ type: 'blob' });
     downloadBlob(zipBlob, 'converted-photos.zip');
+    /* Mark step 3 done (green) on actual download */
+    const s3z = document.getElementById('step-3');
+    if (s3z) { s3z.classList.remove('active'); s3z.classList.add('done'); }
   });
 
   /* Recompress non-HEIC via canvas */

@@ -20,6 +20,10 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="assets/style.css">
+<link rel="icon" type="image/svg+xml" href="./favicon.svg">
+<link rel="icon" type="image/x-icon" href="./favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
 
   <style>
     /* Homepage-only overrides */
@@ -109,7 +113,7 @@
 ══════════════════════════════════════════════ -->
 <header class="site-header">
   <div class="header-inner">
-    <a href="" class="site-logo">
+    <a href="./" class="site-logo">
       <div class="logo-mark">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="28" height="28" aria-hidden="true">
           <rect width="200" height="200" rx="40" fill="#0F172A"/>
@@ -234,28 +238,28 @@
       <a href="maharashtra/mht-cet-photo-resizer.html" class="tool-card">
         <span class="tool-card-icon">🔬</span>
         <div class="tool-card-name">MHT-CET Photo</div>
-        <div class="tool-card-meta">413 × 531 px · JPEG</div>
+        <div class="tool-card-meta">275 × 354 px · JPEG</div>
         <span class="tool-card-kb">Max 100 KB</span>
       </a>
 
       <a href="maharashtra/maharashtra-police-photo-resizer.html" class="tool-card">
         <span class="tool-card-icon">👮</span>
         <div class="tool-card-name">Maharashtra Police</div>
-        <div class="tool-card-meta">200 × 230 px · JPEG</div>
-        <span class="tool-card-kb">Max 50 KB</span>
+        <div class="tool-card-meta">160 × 200 px · JPEG</div>
+        <span class="tool-card-kb">Max 20 KB</span>
       </a>
 
       <a href="maharashtra/zp-bharti-photo-resizer.html" class="tool-card">
         <span class="tool-card-icon">🏫</span>
         <div class="tool-card-name">ZP Bharti Photo</div>
-        <div class="tool-card-meta">150 × 200 px · JPEG</div>
+        <div class="tool-card-meta">275 × 354 px · JPEG</div>
         <span class="tool-card-kb">Max 50 KB</span>
       </a>
 
       <a href="maharashtra/mpsc-signature-resizer.html" class="tool-card">
         <span class="tool-card-icon">✍️</span>
         <div class="tool-card-name">MPSC Signature</div>
-        <div class="tool-card-meta">140 × 60 px · JPEG</div>
+        <div class="tool-card-meta">150 × 60 px · JPEG</div>
         <span class="tool-card-kb">Max 20 KB</span>
       </a>
 
@@ -303,8 +307,8 @@
       <a href="exams/upsc-photo-resizer.html" class="tool-card">
         <span class="tool-card-icon">🏛️</span>
         <div class="tool-card-name">UPSC Photo</div>
-        <div class="tool-card-meta">300 × 400 px · JPEG</div>
-        <span class="tool-card-kb">Max 300 KB</span>
+        <div class="tool-card-meta">350 × 350 px · JPEG</div>
+        <span class="tool-card-kb">Max 100 KB</span>
       </a>
 
       <a href="exams/ssc-photo-resizer.html" class="tool-card">
@@ -411,9 +415,8 @@
       </div>
       <div class="field">
         <label class="field-label">Format</label>
-        <select id="inp-fmt">
-          <option value="jpeg">JPEG</option>
-          <option value="png">PNG</option>
+        <select id="inp-fmt" disabled>
+          <option value="jpeg" selected>JPEG</option>
         </select>
       </div>
     </div>
@@ -502,13 +505,13 @@
     <h2>Frequently Asked Questions</h2>
 
     <div class="faq-item">
-      <button class="faq-q-btn">What is the photo size required for Aadhar Card? <span class="faq-chevron">⌄</span></button>
+      <button class="faq-q-btn">What is the Aadhaar Card photo size requirement? <span class="faq-chevron">⌄</span></button>
       <div class="faq-answer">UIDAI requires a 200×200 pixel JPEG photograph with a maximum file size of 50 KB. The background should be white with a clear view of the face. Use the Aadhar Card preset above.</div>
     </div>
 
     <div class="faq-item">
       <button class="faq-q-btn">What is the MPSC photo size and format? <span class="faq-chevron">⌄</span></button>
-      <div class="faq-answer">MPSC requires a passport-size photograph of 3.5 cm × 4.5 cm (approximately 125×170 pixels), JPEG format, maximum 50 KB. Use the dedicated <a href="maharashtra/mpsc-photo-resizer.html" style="color:var(--saffron)">MPSC Photo Resizer</a> page for exact specs and FAQ.</div>
+      <div class="faq-answer">MPSC requires a passport-size photograph of 3.5 cm × 4.5 cm (approximately 275×354 pixels), JPEG format, maximum 50 KB. Use the dedicated <a href="maharashtra/mpsc-photo-resizer.html" style="color:var(--saffron)">MPSC Photo Resizer</a> page for exact specs and FAQ.</div>
     </div>
 
     <div class="faq-item">
@@ -518,7 +521,7 @@
 
     <div class="faq-item">
       <button class="faq-q-btn">How do I resize a photo to under 20 KB? <span class="faq-chevron">⌄</span></button>
-      <div class="faq-answer">Use the <a href="kb/20kb-image-resizer.html" style="color:var(--saffron)">20 KB Image Resizer</a> page — the KB limit is pre-filled. Lower the quality slider until the output shows under 20 KB in the result panel. JPEG at 60–75% quality usually reaches 20 KB for a passport-sized crop.</div>
+      <div class="faq-answer">Use the <a href="kb/20kb-image-resizer.html" style="color:var(--saffron)">20 KB Image Resizer</a> page. Upload your photo and the tool will automatically optimize it to meet the selected file size while maintaining good visual quality. Everything happens directly in your browser for complete privacy.</div>
     </div>
 
     <div class="faq-item">

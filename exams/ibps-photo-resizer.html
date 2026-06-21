@@ -57,7 +57,7 @@
       <a href="../exams/ssc-photo-resizer.html"   class="nav-link">SSC</a>
       <a href="../exams/ibps-photo-resizer.html"  class="nav-link active">IBPS</a>
       <a href="../maharashtra/mpsc-photo-resizer.html" class="nav-link">Maharashtra</a>
-      <a href="../"                               class="nav-link">All Tools</a>
+      <a href="../"                               class="nav-link">Home</a>
     </nav>
     <button class="nav-toggle" id="nav-toggle" aria-label="Open menu">☰</button>
   </div>
@@ -142,9 +142,8 @@
     </div>
     <div class="field">
       <label class="field-label">Format</label>
-      <select id="inp-fmt">
+      <select id="inp-fmt" disabled>
         <option value="jpeg" selected>JPEG</option>
-        <option value="png">PNG</option>
       </select>
     </div>
   </div>
@@ -256,13 +255,13 @@
     </div>
 
     <div class="faq-item">
-      <button class="faq-q-btn">My IBPS photo is 52 KB after resizing. How do I reduce it? <span class="faq-chevron">⌄</span></button>
-      <div class="faq-answer">The binary-search compression in this tool automatically finds the highest quality that fits under the target KB. If the result is still over 50 KB, manually lower the quality slider to 76–78% and click resize again. At 200×230 px, 78% JPEG quality consistently produces a file between 25–45 KB.</div>
+      <button class="faq-q-btn">My IBPS photo is getting rejected. What should I check? <span class="faq-chevron">⌄</span></button>
+      <div class="faq-answer">Make sure your photo meets the required dimensions and file size limits. The image should be clear, well-lit, in JPEG format, and your face should be properly visible and centred. This tool automatically resizes the photo to the correct dimensions and helps improve visibility using Brightness and Contrast controls.</div>
     </div>
 
     <div class="faq-item">
-      <button class="faq-q-btn">Can I upload a scanned photo for IBPS? <span class="faq-chevron">⌄</span></button>
-      <div class="faq-answer">Yes. Scanned passport photos are accepted as long as they meet the spec. Scan at 200 DPI or higher, ensure the background is white and not grey or cream from the scanner. Upload the scan here to resize to exactly 200×230 px and compress under 50 KB before submitting to the IBPS portal.</div>
+      <button class="faq-q-btn">What if the IBPS portal shows "photograph not as per specification"? <span class="faq-chevron">⌄</span></button>
+      <div class="faq-answer">This usually means the photo does not meet one or more IBPS requirements, such as dimensions, file size, image quality, or format. Ensure the photo is a clear JPEG image with the correct dimensions and a visible face. If the issue persists, download the image again and try uploading it using an updated browser.</div>
     </div>
 
     <div class="faq-item">

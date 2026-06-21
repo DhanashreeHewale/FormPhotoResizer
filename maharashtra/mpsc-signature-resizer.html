@@ -4,15 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>MPSC Signature Resizer 2026 – Resize to 140×60 px, Max 20 KB | FormPhotoResizer.in</title>
-  <meta name="description" content="Free MPSC signature resizer. Resize your signature to 140×60 px, JPEG, max 20 KB as required by Maharashtra Public Service Commission. Also resize MPSC photo to 275×354 px, max 50 KB. 100% private.">
+  <title>MPSC Signature Resizer 2026 – Resize to 150×60 px, Max 20 KB | FormPhotoResizer.in</title>
+  <meta name="description" content="Free MPSC signature resizer. Resize your signature to 150×60 px, JPEG, max 20 KB as required by Maharashtra Public Service Commission. Also resize MPSC photo to 275×354 px, max 50 KB. 100% private.">
   <meta name="keywords" content="mpsc signature resizer, mpsc signature size, mpsc signature compress, mpsc signature 20kb, mpsc signature pixels, maharashtra psc signature size 2026">
 
   <meta property="og:image" content="https://formphotoresizer.in/assets/og-image.svg">
   <link rel="canonical" href="https://formphotoresizer.in/maharashtra/mpsc-signature-resizer.html">
 
-  <meta property="og:title"       content="MPSC Signature Resizer 2026 — 140×60 px, Max 20 KB">
-  <meta property="og:description" content="Resize your MPSC signature to 140×60 px, max 20 KB. Free, private, instant — no server upload.">
+  <meta property="og:title"       content="MPSC Signature Resizer 2026 — 150×60 px, Max 20 KB">
+  <meta property="og:description" content="Resize your MPSC signature to 150×60 px, max 20 KB. Free, private, instant — no server upload.">
   <meta property="og:type"        content="website">
   <meta property="og:url"         content="https://formphotoresizer.in/maharashtra/mpsc-signature-resizer.html">
 
@@ -24,7 +24,7 @@
     "@type": "WebApplication",
     "name": "MPSC Signature Resizer",
     "url": "https://formphotoresizer.in/maharashtra/mpsc-signature-resizer.html",
-    "description": "Resize and compress signature for MPSC Maharashtra to 140×60 px, max 20 KB.",
+    "description": "Resize and compress signature for MPSC Maharashtra to 150×60 px, max 20 KB.",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "Any",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
@@ -58,7 +58,7 @@
       <a href="../maharashtra/maharashtra-police-photo-resizer.html" class="nav-link">MH Police</a>
       <a href="../maharashtra/zp-bharti-photo-resizer.html"         class="nav-link">ZP Bharti</a>
       <a href="../maharashtra/mpsc-signature-resizer.html"          class="nav-link active">MPSC Sig</a>
-      <a href="../"                                                 class="nav-link">All Tools</a>
+      <a href="../"                                                 class="nav-link">Home</a>
     </nav>
     <button class="nav-toggle" id="nav-toggle" aria-label="Open menu">☰</button>
   </div>
@@ -70,7 +70,7 @@
   <div class="page-hero">
     <div class="page-eyebrow">Maharashtra · MPSC 2026</div>
     <h1 class="page-title">MPSC Signature Resizer</h1>
-    <p class="page-subtitle">Resize your signature image to exactly <strong>140×60 px, max 20 KB</strong> as required by MPSC. Also resize your MPSC photo to <strong>275×354 px, max 50 KB</strong> — both in one tool. Free and 100% private.</p>
+    <p class="page-subtitle">Resize your signature image to exactly <strong>150×60 px, max 20 KB</strong> as required by MPSC. Also resize your MPSC photo to <strong>275×354 px, max 50 KB</strong> — both in one tool. Free and 100% private.</p>
   </div>
 
   <div class="privacy-banner">
@@ -85,7 +85,7 @@
       <tr><th>Document</th><th>Dimensions</th><th>Format</th><th>Max Size</th><th>Notes</th></tr>
     </thead>
     <tbody>
-      <tr><td>Signature</td><td class="spec-val">140 × 60 px</td><td>JPEG / JPG</td><td class="spec-val">20 KB</td><td>Black/blue ink on white paper</td></tr>
+      <tr><td>Signature</td><td class="spec-val">150 × 60 px</td><td>JPEG / JPG</td><td class="spec-val">20 KB</td><td>Black/blue ink on white paper</td></tr>
       <tr><td>Photograph</td><td class="spec-val">275 × 354 px</td><td>JPEG / JPG</td><td class="spec-val">50 KB</td><td>Recent, white background</td></tr>
     </tbody>
   </table>
@@ -133,7 +133,7 @@
   <div class="settings-grid">
     <div class="field">
       <label class="field-label">Width (px)</label>
-      <input type="number" id="inp-w" value="140" min="10" max="3000">
+      <input type="number" id="inp-w" value="150" min="10" max="3000">
     </div>
     <div class="field">
       <label class="field-label">Height (px)</label>
@@ -141,9 +141,8 @@
     </div>
     <div class="field">
       <label class="field-label">Format</label>
-      <select id="inp-fmt">
+      <select id="inp-fmt" disabled>
         <option value="jpeg" selected>JPEG</option>
-        <option value="png">PNG</option>
       </select>
     </div>
   </div>
@@ -158,7 +157,7 @@
     <!-- Target KB (wired to binary-search compression in tool.js) -->
     <div class="target-kb-row" style="display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap;">
       <label for="inp-kb" style="font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap;">Target max size:</label>
-      <input type="number" id="inp-kb" min="1" max="5000" value="50"
+      <input type="number" id="inp-kb" min="1" max="5000" value="20"
              style="width:80px;border:1px solid var(--border);border-radius:5px;padding:7px 10px;font-size:14px;font-family:inherit;outline:none;">
       <span style="font-size:13px;color:var(--muted);">KB</span>
       <span style="font-size:11px;color:var(--hint);">(auto-adjusts quality to hit this limit)</span>
@@ -219,7 +218,7 @@
 
     <div class="faq-item">
       <button class="faq-q-btn">What is the MPSC signature size in pixels? <span class="faq-chevron">⌄</span></button>
-      <div class="faq-answer">The MPSC portal requires a signature image of <strong>140 × 60 pixels</strong> in JPEG format with a maximum file size of <strong>20 KB</strong>. The signature should be on a plain white background.</div>
+      <div class="faq-answer">The MPSC portal requires a signature image of <strong>150 × 60 pixels</strong> in JPEG format with a maximum file size of <strong>20 KB</strong>. The signature should be on a plain white background.</div>
     </div>
 
     <div class="faq-item">
@@ -227,9 +226,16 @@
       <div class="faq-answer">Use <strong>black or blue ink</strong> on plain white paper. Avoid gel pens that smear. Sign naturally — do not print or trace your signature. Photograph the signature in bright natural light or scan it for best clarity.</div>
     </div>
 
-    <div class="faq-item">
+    <!-- <div class="faq-item">
       <button class="faq-q-btn">My signature image is not coming under 20 KB. What to do? <span class="faq-chevron">⌄</span></button>
-      <div class="faq-answer">At 140×60 px, a JPEG at 80–90% quality is typically 5–15 KB. If it is still over 20 KB, lower the quality slider to 70%. The small canvas size means even moderate quality is more than sufficient visually. The validation strip will show green when you are within the limit.</div>
+      <div class="faq-answer">At 150×60 px, a JPEG at 80–90% quality is typically 5–15 KB. If it is still over 20 KB, lower the quality slider to 70%. The small canvas size means even moderate quality is more than sufficient visually. The validation strip will show green when you are within the limit.</div>
+    </div> -->
+
+    <div class="faq-item">
+      <button class="faq-q-btn">When should I use the Brightness and Contrast controls? <span class="faq-chevron">⌄</span></button>
+      <div class="faq-answer">
+        Use Brightness if your photo appears too dark or too bright. Use Contrast to improve the difference between light and dark areas, making facial features clearer. Small adjustments are usually enough for exam and ID photos. If the image looks unnatural, click "Reset Adjustments" and try again.
+      </div>
     </div>
 
     <div class="faq-item">
@@ -262,7 +268,7 @@
       <a href="../maharashtra/maharashtra-police-photo-resizer.html">MH Police Photo</a>
       <a href="../maharashtra/zp-bharti-photo-resizer.html">ZP Bharti Photo</a>
       <a href="../maharashtra/mpsc-signature-resizer.html">MPSC Signature</a>
-      <a href="../">All Tools</a>
+      <a href="../">Home</a>
     </div>
   </div>
   <div class="footer-bottom">
@@ -275,7 +281,7 @@
 window.TOOL_CONFIG = {
   examName: 'mpsc',
   presets: [
-    { id: 'mpsc-sign', filename: 'mpscsign', icon: '✍️', name: 'MPSC Signature', sizeLabel: '275 × 118 px', kbLabel: 'Max 50 KB', w: 275, h: 118, maxKB: 50, format: 'jpeg' },
+    { id: 'mpsc-sign', filename: 'mpscsign', icon: '✍️', name: 'MPSC Signature', sizeLabel: '150 × 60 px', kbLabel: 'Max 20 KB', w: 150, h: 60, maxKB: 20, format: 'jpeg' },
     { id: 'mpsc-photo', filename: 'mpscphoto', icon: '📋', name: 'MPSC Photo',     sizeLabel: '275 × 354 px', kbLabel: 'Max 50 KB', w: 275, h: 354, maxKB: 50, format: 'jpeg' },
   ],
 };

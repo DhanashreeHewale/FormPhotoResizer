@@ -4,15 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Remove Background from Photo Free – AI White Background for Government Forms | FormPhotoResize.in</title>
+  <title>Remove Background from Photo Free – AI White Background for Government Forms | FormPhotoResizer.in</title>
   <meta name="description" content="Remove photo background and replace with white instantly using AI — free, 100% in-browser, no upload. Perfect for Aadhar, PAN, Passport, MPSC and all government form photos.">
   <meta name="keywords" content="remove background photo free, white background photo online, ai background remover, government form photo white background, passport photo background remove, mpsc photo white background">
 
-  <link rel="canonical" href="https://formphotosize.in/tools/remove-background.html">
+  <link rel="canonical" href="https://formphotoresizer.in/tools/remove-background.html">
   <meta property="og:title"       content="AI Background Remover — Free, In-Browser, White Background">
   <meta property="og:description" content="Remove photo background and add white fill instantly using AI. Free, private, no upload needed.">
   <meta property="og:type"        content="website">
-  <meta property="og:url"         content="https://formphotosize.in/tools/remove-background.html">
+  <meta property="og:url"         content="https://formphotoresizer.in/tools/remove-background.html">
 
   <link rel="stylesheet" href="../assets/style.css">
 
@@ -62,11 +62,11 @@
     /* Canvas area */
     .canvas-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 14px;
       margin-bottom: 20px;
     }
-    @media (max-width: 480px) { .canvas-row { grid-template-columns: 1fr; } }
+    
 
     .canvas-box {
       background: var(--bg);
@@ -308,7 +308,7 @@
       <a href="../tools/heic-to-jpg.html"        class="nav-link">HEIC→JPG</a>
       <a href="../tools/photo-validator.html"    class="nav-link">Validator</a>
       <a href="../maharashtra/mpsc-photo-resizer.html" class="nav-link">Maharashtra</a>
-      <a href="../" class="nav-link">All Tools</a>
+      <a href="../" class="nav-link">Home</a>
     </nav>
     <button class="nav-toggle" id="nav-toggle" aria-label="Open menu">☰</button>
   </div>
@@ -327,23 +327,18 @@
     100% private — AI runs entirely in your browser. No image is uploaded anywhere.
   </div>
 
-  <!-- How it works -->
-  <div class="section-label">How it works</div>
-  <div class="how-steps">
-    <div class="how-step">
-      <div class="how-step-num">1</div>
-      <div class="how-step-title">Upload photo</div>
-      <div class="how-step-sub">Any background — outdoor, coloured wall, studio</div>
+  <div class="step-bar" style="margin-bottom:20px;">
+    <div class="step-item active" id="step-1">
+      <div class="step-num">1</div>
+      <div class="step-label">Upload Photo<span class="step-sublabel">JPG or PNG, any background</span></div>
     </div>
-    <div class="how-step">
-      <div class="how-step-num">2</div>
-      <div class="how-step-title">AI removes BG</div>
-      <div class="how-step-sub">RMBG-1.4 model runs locally in your browser</div>
+    <div class="step-item" id="step-2">
+      <div class="step-num">2</div>
+      <div class="step-label">AI Removes BG<span class="step-sublabel">RMBG-1.4 runs in browser</span></div>
     </div>
-    <div class="how-step">
-      <div class="how-step-num">3</div>
-      <div class="how-step-title">Download</div>
-      <div class="how-step-sub">White background PNG or JPG, ready to upload</div>
+    <div class="step-item" id="step-3">
+      <div class="step-num">3</div>
+      <div class="step-label">Download<span class="step-sublabel">White BG PNG/JPG, ready to upload</span></div>
     </div>
   </div>
 
@@ -383,21 +378,14 @@
       style="width:28px;height:28px;border:2px solid var(--border);border-radius:50%;cursor:pointer;padding:1px;">
   </div>
 
-  <!-- Canvas row (before / after) -->
+  <!-- Result box only — preview is in upload zone above -->
   <div class="canvas-row" id="canvas-row" style="display:none;">
-    <div class="canvas-box" id="box-original">
-      <div class="canvas-placeholder">
-        <div class="ph-icon">🖼️</div>
-        <p>Original photo</p>
-      </div>
-      <div class="canvas-box-label">Original</div>
-    </div>
     <div class="canvas-box" id="box-result">
       <div class="canvas-placeholder">
         <div class="ph-icon">✨</div>
         <p>Result appears here</p>
       </div>
-      <div class="canvas-box-label">Background Removed</div>
+      <div class="canvas-box-label">Result Preview</div>
     </div>
   </div>
 
@@ -494,11 +482,11 @@
       <a href="../tools/heic-to-jpg.html">HEIC → JPG</a>
       <a href="../tools/photo-validator.html">Photo Validator</a>
       <a href="../maharashtra/mpsc-photo-resizer.html">MPSC Photo</a>
-      <a href="../">All Tools</a>
+      <a href="../">Home</a>
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2025 FormPhotoResize.in — All processing is local. Zero data stored.</span>
+    <span>© 2026 FormPhotoResizer.in — All processing is local. Zero data stored.</span>
     <span>🔒 Privacy First</span>
   </div>
 </footer>
@@ -576,13 +564,27 @@
   import { AutoModel, AutoProcessor, RawImage, env }
     from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.5.2/dist/transformers.min.js';
 
+
+  function setStep(n) {
+    [1, 2, 3].forEach(i => {
+      const el = document.getElementById('step-' + i);
+      if (!el) return;
+      el.classList.remove('active', 'done');
+      if (i < n) el.classList.add('done');
+      if (i === n) el.classList.add('active');
+    });
+  }
+  setStep(1);
+
   env.allowLocalModels  = false;
   env.allowRemoteModels = true;
-  env.backends.onnx.wasm.proxy      = false;
-  env.backends.onnx.wasm.numThreads = 1;
+  /* Use transformers.js built-in CDN proxy to avoid CORS errors when
+     loading from localhost or non-huggingface origins.
+     Do NOT set wasm.proxy=false — let the library handle threading safely. */
+  env.backends.onnx.wasm.numThreads = 1;  // single thread — avoids SharedArrayBuffer requirement
 
   const MODEL_ID   = 'briaai/RMBG-1.4';
-  const MODEL_OPTS = { dtype: 'fp16' };
+  const MODEL_OPTS = { dtype: 'fp32' };  // fp32: broader browser/CDN compatibility vs fp16
 
   /* ── DOM refs ── */
   const fileInput    = document.getElementById('file-input');
@@ -596,7 +598,6 @@
   const progressFill = document.getElementById('progress-fill');
   const progressLbl  = document.getElementById('progress-label');
   const progressPct  = document.getElementById('progress-pct');
-  const boxOriginal  = document.getElementById('box-original');
   const boxResult    = document.getElementById('box-result');
   const canvasRow    = document.getElementById('canvas-row');
   const bgOptions    = document.getElementById('bg-options');
@@ -627,16 +628,35 @@
     reader.onload = e => {
       origImg = new Image();
       origImg.onload = () => {
-        /* Show original in canvas-row */
-        boxOriginal.innerHTML = `<img src="${e.target.result}" alt="Original"><div class="canvas-box-label">Original</div>`;
-        boxResult.innerHTML   = `<div class="canvas-placeholder"><div class="ph-icon">✨</div><p>Click Remove Background</p></div><div class="canvas-box-label">Background Removed</div>`;
-        canvasRow.style.display = 'grid';
+        /* Show result box placeholder — preview is in upload zone */
+        boxResult.innerHTML = `<div class="canvas-placeholder"><div class="ph-icon">✨</div><p>Click Remove Background</p></div><div class="canvas-box-label">Result Preview</div>`;
+        canvasRow.style.display = 'block';
         bgOptions.style.display = 'flex';
 
+        /* Show preview inside upload zone — no separate Original box */
         uploadZone.classList.add('loaded');
-        uploadIcon.textContent  = '✅';
-        uploadTitle.textContent = file.name;
-        btnRemove.disabled      = false;
+        let zonePreview = uploadZone.querySelector('.upload-live-preview');
+        if (!zonePreview) {
+          zonePreview = document.createElement('img');
+          zonePreview.className = 'upload-live-preview';
+          zonePreview.alt = 'Preview';
+          zonePreview.style.cssText = 'max-height:260px;max-width:100%;object-fit:contain;display:block;margin:0 auto 6px;border-radius:6px;';
+          uploadZone.insertBefore(zonePreview, uploadZone.firstChild);
+        }
+        zonePreview.src = e.target.result;
+
+        const zIcon  = document.getElementById('upload-icon');
+        const zTitle = document.getElementById('upload-title');
+        const zHint  = uploadZone.querySelector('.upload-hint');
+        if (zIcon)  zIcon.style.display  = 'none';
+        if (zTitle) zTitle.style.display = 'none';
+        if (zHint)  zHint.style.display  = 'none';
+
+        const zSub = uploadZone.querySelector('.upload-sub');
+        if (zSub) zSub.innerHTML = `📁 <strong>${file.name}</strong> &nbsp;·&nbsp; ${(file.size/1024).toFixed(1)} KB &nbsp;·&nbsp; <span style="color:var(--saffron);cursor:pointer">Click to change</span>`;
+
+        btnRemove.disabled = false;
+        setStep(2);
         maskData = null;
         btnDownload.style.display = 'none';
         btnResizeAfter.classList.remove('show');
@@ -725,6 +745,7 @@
       btnRemove.textContent = '✨ Remove Again';
       btnRemove.disabled    = false;
       btnDownload.style.display = 'flex';
+      setStep(3);  /* Removal done — step 2 green, step 3 orange */
       btnResizeAfter.classList.add('show');
       shareRow.style.display  = 'flex';
       ratingBox.style.display = 'block';
@@ -799,6 +820,9 @@
       outputBlob = blob;
       const ext  = bgColor === 'none' ? 'png' : 'jpg';
       btnDownload.onclick = () => {
+        /* Mark step 3 done (green) on actual download */
+        const s3 = document.getElementById('step-3');
+        if (s3) { s3.classList.remove('active'); s3.classList.add('done'); }
         const a = document.createElement('a');
         a.href     = URL.createObjectURL(blob);
         a.download = 'photo-white-bg.' + ext;
